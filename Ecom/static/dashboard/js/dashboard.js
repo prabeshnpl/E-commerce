@@ -140,33 +140,38 @@ window.addEventListener('DOMContentLoaded', function() {
     
     // Fetches products using fetch and loads 20 per page/request
     function loadMoreProducts(){
+        const spinner = document.getElementById('spinner')
+        spinner.style.display = 'block';
         
-    fetch(`${baseUrl}/products/?page=${currentPage}`)
+        fetch(`${baseUrl}/products/?page=${currentPage}`)
 
-    .then(response => response.json())
-    .then(data => {
-        data.products.forEach(product =>{
-            const productCard = `
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="/media/${product.image}" alt="${product.name}">
+        .then(response => response.json())
+        .then(data => {
+            data.products.forEach(product =>{
+                const productCard = `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${baseUrl}/media/${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">$${product.price}</p>
+                        <button class="add-to-cart-btn" data-id="1" data-name="Product Name" data-price="49.00" data-image="/api/placeholder/150/150">Add to Cart</button>
+                    </div>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.name}</h3>
-                    <p class="product-price">$${product.price}</p>
-                    <button class="add-to-cart-btn" data-id="1" data-name="Product Name" data-price="49.00" data-image="/api/placeholder/150/150">Add to Cart</button>
-                </div>
-            </div>
-            `;
-            productContainer.insertAdjacentHTML('beforeend',productCard);
-
+                `;
+                productContainer.insertAdjacentHTML('beforeend',productCard);
+            })
+            spinner.style.display = 'none';
         })
-    })
-    .catch(error => {
-        console.error('Error fetching products:', error);
-    })
-        currentPage++;
-    }
+        .catch(error => {
+            console.error('Error fetching products:', error);
+            // spinner.style.display = 'none';
+        });
+            currentPage++;
+        }
+
+
     loadMoreProducts();
     
     // Add some sample items to cart

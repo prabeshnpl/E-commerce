@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Registration</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">LOGO</div>
+                <ul class="nav-menu">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">My Cart</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <div class="search-container">
+                    <input type="text" class="search-box" placeholder="Search...">
+                    <button class="search-btn">🔍</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Authentication Section -->
+    <section class="auth-container container">
+        <div class="form-container">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchForm('login')">Login</button>
+                <button class="tab-btn" onclick="switchForm('register')">Register</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="form active">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">Login</button>
+                </div>
+                <div class="form-footer">
+                    <p>Forgot your password? <a href="#">Reset here</a></p>
+                </div>
+            </form>
+            
+            <!-- Registration Form -->
+            <form id="register-form" class="form">
+                <div class="form-group">
+                    <label for="reg-name">Full Name</label>
+                    <input type="text" id="reg-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email Address</label>
+                    <input type="email" id="reg-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm-password">Confirm Password</label>
+                    <input type="password" id="reg-confirm-password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">Create Account</button>
+                </div>
+                <div class="form-footer">
+                    <p>By registering, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+                </div>
+            </form>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Your E-commerce Store. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        function switchForm(formId) {
+            // Hide all forms
+            document.querySelectorAll('.form').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Deactivate all tabs
+            document.querySelectorAll('.tab-btn').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected form
+            document.getElementById(formId + '-form').classList.add('active');
+            
+            // Activate selected tab
+            document.querySelector(`.tab-btn[onclick="switchForm('${formId}')"]`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
