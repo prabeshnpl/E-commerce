@@ -45,61 +45,8 @@
             
             <section class="featured-products">
                 <h2>Featured Products</h2>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="{% static 'img/shoes.jpg' %}" alt="Brown Messenger Bag">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Brown Sneakers</h3>
-                            <p class="product-price">$49.00</p>
-                            <button class="add-to-cart-btn" data-id="1" data-name="Product Name" data-price="49.00" data-image="/api/placeholder/150/150">Add to Cart</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="{% static 'img/watch.jpg' %}" alt="Metal watch">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Watch</h3>
-                            <p class="product-price">$99.00</p>
-                            <button class="add-to-cart-btn" data-id="1" data-name="Product Name" data-price="49.00" data-image="/api/placeholder/150/150">Add to Cart</button>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="{% static 'img/blue_shirt.jpeg' %}" alt="Blue T-Shirt">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">T-shirt</h3>
-                            <p class="product-price">$4.99</p>
-                            <button class="add-to-cart-btn" data-id="2" data-name="Product Name" data-price="19.00" data-image="/api/placeholder/150/150">Add to Cart</button>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="{% static 'img/white_sneaker.jpeg' %}" alt="White Sneakers">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">White Sneakers</h3>
-                            <p class="product-price">$59.00</p>
-                            <button class="add-to-cart-btn" data-id="3" data-name="Product Name" data-price="59.00" data-image="/api/placeholder/150/150">Add to Cart</button>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="{% static 'img/headphone.jpeg' %}" alt="Black Headphones">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Headphone</h3>
-                            <p class="product-price">$89.00</p>
-                            <button class="add-to-cart-btn" data-id="4" data-name="Product Name" data-price="89.00" data-image="/api/placeholder/150/150">Add to Cart</button>
-                        </div>
-                    </div>
+                <div class="product-grid" id="product-grid">
+                    <!-- Fills the product fetched using javascript -->
                 </div>
             </section>
         </div>

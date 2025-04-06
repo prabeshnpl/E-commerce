@@ -7,7 +7,7 @@ def home(request):
     return render(request, 'dashboard.html')
 
 def load_products(request):
-    page_no = request.GET.get('page',1) #if no pageno default=1
+    page_no = request.GET.get('page',1) #if no pageno, default=1
     paginator = Paginator(Product.objects.all(),20)
     page = paginator.get_page(page_no)
 
