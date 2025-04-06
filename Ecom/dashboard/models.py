@@ -13,9 +13,13 @@ class Product(models.Model):
     stock = models.IntegerField()
 
 class Cart(models.Model):
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='cart')
-    products = models.ManyToManyField(Product,related_name='cart',through="CartProduct",blank=True)
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='user_cart')
+    products = models.ManyToManyField(Product,related_name='in_carts',through="CartProduct",blank=True)
 
 class CartProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    no_of_product = models.IntegerField()
+
+    class Meta:
+        unique_together = ('product','cart')
