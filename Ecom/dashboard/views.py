@@ -19,16 +19,26 @@ def Login(request):
             if user:
                 login(request,user)
                 return redirect('home')
+            else:
+                messages.error(request,'Invalid Credentials')
+                return redirect('login')
+
         elif request.POST.get('type') == 'register':
             full_name = request.POST.get('fullname')
             email = request.POST.get('email')
             password = request.POST.get('password')
             confirm_password = request.POST.get('confirm-password')
             if password != confirm_password:
-                messages.error(request,'Invalid Credentials')
-                return redirect('login')
+                messages.error(request,'Password didn\'t matched ! ')
+                return render(request,'login.html')
             try:
-                CustomUser.objects.create_user(first_name=full_name,email=email,password=password)
+
+                user = CustomUser.objects.create(first_name=full_name, email=email)
+                user.set_password(password)
+                user.save()
+                if user:
+                    messages.success(request,'Account Registration Successful ! ')
+
             except Exception as e:
                 messages.error(request,str(e))
 
