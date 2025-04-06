@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Store</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+</head>
+<body>
+    <header>
+        <div class="logo">LOGO</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                <li><a href="#" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
+                <li><a href="#" class="nav-link" data-page="about">About</a></li>
+                <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="search-box">
+            <input type="text" placeholder="Search...">
+            <button>🔍</button>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Homepage Content -->
+        <div class="homepage" id="homepage">
+            <section class="hero">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Shop the Latest Trends</h1>
+                        <p>Discover our collection of the most recent arrivals and best-selling products.</p>
+                        <button class="shop-now-btn">My Cart</button>
+                    </div>
+                    <div class="hero-images">
+                        <img src="{% static 'img/handbag.jpg' %}" alt="Yellow handbag">
+                        <img src="{% static 'img/headphone.jpeg' %}" alt="Headphones">
+                        <img src="{% static 'img/watch.jpg' %}" alt="Watch">
+                        <img src="{% static 'img/shoes.jpg' %}" alt="Shoes">
+                    </div>
+                </div>
+            </section>
+            
+            <section class="featured-products">
+                <h2>Featured Products</h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="{% static 'img/shoes.jpg' %}" alt="Brown Messenger Bag">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Brown Sneakers</h3>
+                            <p class="product-price">$49.00</p>
+                            <button class="add-to-cart-btn" data-id="1" data-name="Product Name" data-price="49.00" data-image="/api/placeholder/150/150">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="{% static 'img/watch.jpg' %}" alt="Metal watch">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Watch</h3>
+                            <p class="product-price">$99.00</p>
+                            <button class="add-to-cart-btn" data-id="1" data-name="Product Name" data-price="49.00" data-image="/api/placeholder/150/150">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="{% static 'img/blue_shirt.jpeg' %}" alt="Blue T-Shirt">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">T-shirt</h3>
+                            <p class="product-price">$4.99</p>
+                            <button class="add-to-cart-btn" data-id="2" data-name="Product Name" data-price="19.00" data-image="/api/placeholder/150/150">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="{% static 'img/white_sneaker.jpeg' %}" alt="White Sneakers">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">White Sneakers</h3>
+                            <p class="product-price">$59.00</p>
+                            <button class="add-to-cart-btn" data-id="3" data-name="Product Name" data-price="59.00" data-image="/api/placeholder/150/150">Add to Cart</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="{% static 'img/headphone.jpeg' %}" alt="Black Headphones">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Headphone</h3>
+                            <p class="product-price">$89.00</p>
+                            <button class="add-to-cart-btn" data-id="4" data-name="Product Name" data-price="89.00" data-image="/api/placeholder/150/150">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Shopping Cart Page -->
+        <div class="cart-page" id="cartPage">
+            <h1>Shopping Cart</h1>
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems">
+                    <!-- Cart items will be dynamically added here -->
+                </tbody>
+            </table>
+            
+            <div class="cart-summary">
+                <p class="subtotal">Subtotal: <span id="cartSubtotal">$0.00</span></p>
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </main>
+    
+    <script src="{% static 'dashboard/js/dashboard.js' %}"></script>
+</body>
+</html>
