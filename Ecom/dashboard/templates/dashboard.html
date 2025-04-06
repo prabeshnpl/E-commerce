@@ -8,14 +8,26 @@
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
 </head>
 <body>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message-{{ message.tags }}">
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
     <header>
         <div class="logo">LOGO</div>
         <nav>
             <ul>
-                <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                <li><a href="{% url 'home' %}" class="nav-link" data-page="home">Home</a></li>
                 <li><a href="#" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
                 <li><a href="#" class="nav-link" data-page="about">About</a></li>
                 <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+                {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
             </ul>
         </nav>
         <div class="search-box">
@@ -77,6 +89,7 @@
                 <button class="checkout-btn">Proceed to Checkout</button>
             </div>
         </div>
+
     </main>
     
     <script src="{% static 'dashboard/js/dashboard.js' %}"></script>

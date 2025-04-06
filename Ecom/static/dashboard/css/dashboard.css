@@ -319,6 +319,24 @@ nav ul li a {
     text-indent: -9999px; /* Hides the "hi" text */
     display: inline-block; /* Ensures the spinner is visible when needed */
 }
+
+.message-error,.message-success{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.message-error{
+    background-color: rgb(244, 104, 104);
+}
+.message-success{
+    background-color: rgb(140, 247, 140);
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
