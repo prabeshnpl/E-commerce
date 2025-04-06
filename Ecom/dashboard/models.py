@@ -3,7 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class CustomUser(AbstractUser):
-    pass
+    def __str__(self):
+        return self.username
 
 class Product(models.Model):
     name = models.CharField(max_length=64)
@@ -12,9 +13,15 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product_images/')
     stock = models.IntegerField()
 
+    def __str__(self):
+        return self.name
+
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='user_cart')
     products = models.ManyToManyField(Product,related_name='in_carts',through="CartProduct",blank=True)
+
+    def __str__(self):
+        return f"{self.user}'s cart"
 
 class CartProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -23,3 +30,6 @@ class CartProduct(models.Model):
 
     class Meta:
         unique_together = ('product','cart')
+
+    def __str__(self):
+        return f"{self.product} in {self.cart}" 
