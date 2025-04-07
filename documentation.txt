@@ -1,0 +1,22 @@
+1) Basic setup
+
+2) Basic Frontend design
+    i) Dashboard page
+        a) Is loaded using views by default
+        b) Uses "load_products" view to asynchronously fetch products 
+        c) Login/Registration
+
+3) Basic backend design
+    i) Created models/tables:
+        a) "CustomUser" with AbstrctUser (with email and password as verification method)
+        b) "Product" with neecessary fields
+        c) "Cart" with it's user(foreign field) and products(m2m field) through "CartProduct" model
+        d) "CartProduct" for intermediate field between Cart and Product consisting extra info 
+
+    ii) Created view:
+        a) "load_products" view/JsonResponse for sending products 20 per page to handle server load
+        b) view for login, logout and Registration
+
+    
+
+4)

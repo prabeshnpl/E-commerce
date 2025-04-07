@@ -58,7 +58,15 @@ def load_products(request):
     paginator = Paginator(Product.objects.all(),20)
     page = paginator.get_page(page_no)
 
-    products = list(page.object_list.values('id','name','image','price','description'))
+    products = list(page.object_list.values('id','name','image','price','description','stock'))
     return JsonResponse({'products':products,'has_next':page.has_next()})
+
+@login_required(login_url='login/')
+def load_cart(request):
+    cart_obj = Cart.objects.get(user=request.user)
+    cart_products = cart_obj.products.all()
+    return JsonResponse({'cart_products': list(cart_products.values('id','name','image','price','description','stock'))})
+
+
 
 

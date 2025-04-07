@@ -6,4 +6,5 @@ urlpatterns = [
     path('login/',views.Login,name='login'), 
     path('logout/',views.Logout,name='logout'), 
     path('products/',views.load_products,name='products'),
+    path('cart_products/',views.load_cart,name='cart_products'),
 ]

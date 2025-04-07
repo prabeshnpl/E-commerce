@@ -171,6 +171,26 @@ window.addEventListener('DOMContentLoaded', function() {
             currentPage++;
         }
 
+    function loadCartProducts(){
+        fetch(`${baseUrl}/cart_products`)
+        .then(response => response.json)
+        .then(data => {
+            data.products.forEach(product => {
+                const productCard = `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${baseUrl}/media/${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">$${product.price}</p>
+                        <button class="add-to-cart-btn" data-id="1" data-name="Product Name" data-price="49.00" data-image="/api/placeholder/150/150">Add to Cart</button>
+                    </div>
+                </div>
+                `;
+            })
+        })
+    }
 
     loadMoreProducts();
     
@@ -179,6 +199,30 @@ window.addEventListener('DOMContentLoaded', function() {
     cart = [
         {id: 1, name: 'Product Name', price: 49.00, image: '/api/placeholder/150/150', quantity: 1},
         {id: 2, name: 'Product Name', price: 19.00, image: '/api/placeholder/150/150', quantity: 1},
+        {id: 2, name: 'Product Name', price: 19.00, image: '/api/placeholder/150/150', quantity: 1},
         {id: 3, name: 'Product Name', price: 59.00, image: '/api/placeholder/150/150', quantity: 1}
     ];
+});
+
+//Mobile functionality
+
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mainNav = document.getElementById('mainNav');
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mainNav.classList.toggle('active');
+        });
+    }
+    
+    // Close mobile menu when clicking on a nav link
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                mainNav.classList.remove('active');
+            }
+        });
+    });
 });

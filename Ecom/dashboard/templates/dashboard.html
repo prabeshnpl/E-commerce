@@ -7,6 +7,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
 </head>
+
 <body>
     {% if messages %}
         {% for message in messages %}
@@ -17,7 +18,12 @@
     {% endif %}
     <header>
         <div class="logo">LOGO</div>
-        <nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        <div class="search-box">
+            <input type="text" placeholder="Search...">
+            <button>🔍</button>
+        </div>
+        <nav id="mainNav">
             <ul>
                 <li><a href="{% url 'home' %}" class="nav-link" data-page="home">Home</a></li>
                 <li><a href="#" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
@@ -30,10 +36,6 @@
                 {% endif %}
             </ul>
         </nav>
-        <div class="search-box">
-            <input type="text" placeholder="Search...">
-            <button>🔍</button>
-        </div>
     </header>
     
     <main>
@@ -58,7 +60,7 @@
             <section class="featured-products">
                 <h2>Featured Products</h2>
 
-                <!-- Display spinning animation while loading. Not working though  -->
+                <!-- Display spinning animation while loading -->
                 <div id="spinner" class="spinner" style="display: none;"></div>
 
                 <div class="product-grid" id="product-grid">
@@ -70,28 +72,29 @@
         <!-- Shopping Cart Page -->
         <div class="cart-page" id="cartPage">
             <h1>Shopping Cart</h1>
-            <table class="cart-table">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody id="cartItems">
-                    <!-- Cart items will be dynamically added here -->
-                </tbody>
-            </table>
+            <div class="cart-container">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartItems">
+                        <!-- Cart items will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
             
             <div class="cart-summary">
                 <p class="subtotal">Subtotal: <span id="cartSubtotal">$0.00</span></p>
                 <button class="checkout-btn">Proceed to Checkout</button>
             </div>
         </div>
-
     </main>
-    
+     
     <script src="{% static 'dashboard/js/dashboard.js' %}"></script>
 </body>
 </html>
