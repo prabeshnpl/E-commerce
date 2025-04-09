@@ -55,11 +55,11 @@ def home(request):
 def cart(request):
     try:
         cart_obj = get_object_or_404(Cart,user=request.user)
-        cart_products = CartProduct.objects.filter(cart = cart_obj)
+        products = cart_obj.products.all()
     except Exception as e:
         messages.error(request,"User's cart not found !!")
         
-    return render(request, 'cart.html',{'products':cart_products})
+    return render(request, 'cart.html',{'products':products})
 
 # @login_required(login_url='login/')
 def load_products(request):

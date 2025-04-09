@@ -55,26 +55,27 @@
                     <tbody id="cartItems">
                         {% if products %}
                             {% for product in products %}
-                                <td>
-                                    <div class="cart-product">
-                                        <div class="cart-product-image">
-                                            <img src="{{ product.product.image.url }}" alt="{{ product.product.name }}">
+                                <tr>
+                                    <td>
+                                        <div class="cart-product">
+                                            <div class="cart-product-image">
+                                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                            </div>
+                                            <div>
+                                                <h3>{{ product.name }}</h3>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3>{{ product.product.name }}</h3>
+                                    </td>
+                                    <td>${{ product.price }}</td>
+                                    <td>
+                                        <div class="quantity-control">
+                                            <button class="quantity-btn decrease" data-id="{{ product.id }}" data-price="{{ product.price }}">-</button>
+                                            <input type="text" class="quantity-input" id="product-count-{{ product.id }}" value="1" readonly>
+                                            <button class="quantity-btn increase" data-id="{{ product.id }}" data-price="{{ product.price }}">+</button>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>${{ product.product.price }}</td>
-                                <td>
-                                    <div class="quantity-control">
-                                        <button class="quantity-btn decrease" data-id="{{product.id }}" data-price="{{ product.product.price }}">-</button>
-                                        <input type="text" class="quantity-input" id="product-count-{{ product.id }}" value="{{ product.no_of_product }}" readonly>
-                                        <button class="quantity-btn increase" data-id="{{ product.id }}" data-price="{{ product.product.price }}">+</button>
-                                    </div>
-                                </td>
-                                <td id="product-price-{{ product.id }}" class="all-prices">${{ product.product.price }}</td>
-
+                                    </td>
+                                    <td id="product-price-{{ product.id }}" class="all-prices">${{ product.price }}</td>    
+                                </tr>
                             {% endfor %}
                         {% endif %}
                     </tbody>
