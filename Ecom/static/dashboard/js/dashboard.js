@@ -2,6 +2,12 @@
 // Initialize the page with some items in the cart for demo
 window.addEventListener('DOMContentLoaded', function() {
 
+    // use body to add event listner since add-to-cart-btn is loaded dynamically later
+    document.body.addEventListener('click', (event) => {
+        if (event.target.classList.contains('add-to-cart-btn')) {
+            
+        }
+    });
         //Mobile functionality
 
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -63,6 +69,5 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
     loadMoreProducts();
-
 
 });
