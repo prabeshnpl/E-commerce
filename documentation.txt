@@ -3,8 +3,9 @@
 2) Basic Frontend design
     i) Dashboard page
         a) Is loaded using views by default
-        b) Uses "load_products" view to asynchronously fetch products 
-        c) Login/Registration
+        b) Login/Registration
+        c) Uses "load_products" view to asynchronously fetch products 
+
 
 3) Basic backend design
     i) Created models/tables:
@@ -16,6 +17,7 @@
     ii) Created view:
         a) "load_products" view/JsonResponse for sending products 20 per page to handle server load
         b) view for login, logout and Registration
+        c) view for cart-page 
 
     
 

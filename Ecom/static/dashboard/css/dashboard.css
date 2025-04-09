@@ -215,7 +215,7 @@ nav ul li a {
 
 /* Cart Page Styles */
 .cart-page {
-    display: none;
+    display: block;
     padding: 20px;
 }
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.core.paginator import Paginator
 from .models import CustomUser, Cart, CartProduct, Product
 from django.http import JsonResponse
@@ -49,8 +49,17 @@ def Logout(request):
     return redirect('home')
 
 def home(request):
-    print(request.user)
     return render(request, 'dashboard.html')
+
+@login_required(login_url='login/')
+def cart(request):
+    try:
+        cart_obj = get_object_or_404(Cart,user=request.user)
+        cart_products = CartProduct.objects.filter(cart = cart_obj)
+    except Exception as e:
+        messages.error(request,"User's cart not found !!")
+        
+    return render(request, 'cart.html',{'products':cart_products})
 
 # @login_required(login_url='login/')
 def load_products(request):
@@ -60,12 +69,6 @@ def load_products(request):
 
     products = list(page.object_list.values('id','name','image','price','description','stock'))
     return JsonResponse({'products':products,'has_next':page.has_next()})
-
-@login_required(login_url='login/')
-def load_cart(request):
-    cart_obj = Cart.objects.get(user=request.user)
-    cart_products = cart_obj.products.all()
-    return JsonResponse({'cart_products': list(cart_products.values('id','name','image','price','description','stock'))})
 
 
 
