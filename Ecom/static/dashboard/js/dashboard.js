@@ -5,9 +5,41 @@ window.addEventListener('DOMContentLoaded', function() {
     // use body to add event listner since add-to-cart-btn is loaded dynamically later
     document.body.addEventListener('click', (event) => {
         if (event.target.classList.contains('add-to-cart-btn')) {
-            
+            fetch(`${baseUrl}/add_to_cart/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken':getCSRFToken()
+                },
+                body: JSON.stringify({
+                    id: event.target.dataset.id,
+                    name: event.target.dataset.name,
+                    price: event.target.dataset.price,
+                    image: event.target.dataset.image
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Item added to cart:', data);
+                const successMessage = document.createElement('div');
+                successMessage.textContent = 'Item added to cart successfully!';
+                successMessage.className = 'message-success';
+                document.body.prepend(successMessage);
+
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 3000);
+            })
+            .catch(error => {
+                console.error('Error adding item to cart:', error);
+            });
         }
     });
+
+    function getCSRFToken() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+        return csrfToken ? csrfToken.value : '';
+    }
         //Mobile functionality
 
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');

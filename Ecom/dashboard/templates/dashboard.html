@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
     {% if messages %}
         {% for message in messages %}
             <div class="message-{{ message.tags }}">

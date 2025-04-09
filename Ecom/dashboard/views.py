@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
+import json
 # Create your views here.
 
 def Login(request):
@@ -61,7 +62,6 @@ def cart(request):
         
     return render(request, 'cart.html',{'products':products})
 
-# @login_required(login_url='login/')
 def load_products(request):
     page_no = request.GET.get('page',1) #if no pageno, default=1
     paginator = Paginator(Product.objects.all(),20)
@@ -70,6 +70,17 @@ def load_products(request):
     products = list(page.object_list.values('id','name','image','price','description','stock'))
     return JsonResponse({'products':products,'has_next':page.has_next()})
 
+@login_required(login_url='login/')
+def add_to_cart(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        id = data.get('id')
+        product = Product.objects.get(id=id)    
+        cart = Cart.objects.get(user=request.user)
+        cart.products.add(product)
+        cart.save()
+        return JsonResponse({'message':data})
+    return JsonResponse({'message':'error occured'})
 
 
 
