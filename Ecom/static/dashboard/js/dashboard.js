@@ -4,6 +4,14 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // use body to add event listner since add-to-cart-btn is loaded dynamically later
     document.body.addEventListener('click', (event) => {
+
+        const productCard = event.target.closest('.product-card');
+        if(productCard){
+            const id = productCard.dataset.id;
+            console.log(id);
+            window.location.href = `${window.location.origin}/products/${id}`;   
+        }
+        
         if (event.target.classList.contains('add-to-cart-btn')) {
             fetch(`${baseUrl}/add_to_cart/`, {
                 method: 'POST',
@@ -37,6 +45,8 @@ window.addEventListener('DOMContentLoaded', function() {
                 console.error('Error adding item to cart:', error);
             });
         }
+
+
     });
 
     function getCSRFToken() {
@@ -81,7 +91,7 @@ window.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             data.products.forEach(product =>{
                 const productCard = `
-                <div class="product-card">
+                <div class="product-card" data-id="${product.id}">
                     <div class="product-image">
                         <img src="${baseUrl}/media/${product.image}" alt="${product.name}">
                     </div>
