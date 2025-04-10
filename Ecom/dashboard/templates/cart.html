@@ -29,7 +29,7 @@
         <nav id="mainNav">
             <ul>
                 <li><a href="{% url 'home' %}" class="nav-link" data-page="home">Home</a></li>
-                <li><a href="#" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
+                <li><a href="#" class="nav-link my-cart-btn active" data-page="shop">My Cart</a></li>
                 <li><a href="#" class="nav-link" data-page="about">About</a></li>
                 <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
                 {% if request.user.is_authenticated %}
@@ -37,6 +37,7 @@
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}
+                <li><a href="{% url 'seller' %}">Be a Seller</a></li>
             </ul>
         </nav>
     </header>
@@ -89,7 +90,10 @@
                                         </span>
                                     </td>
                                 </tr>
+                                {% empty %}
+                                <tr colspan="3">Empty Cart</tr>
                             {% endfor %}
+                            
                         {% endif %}
                     </tbody>
                 </table>

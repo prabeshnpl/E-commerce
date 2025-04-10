@@ -1,20 +1,4 @@
 
-document.querySelectorAll('.decrease').forEach(button => {
-    button.addEventListener('click', function() {
-        const id = parseInt(this.getAttribute('data-id'));
-        const price = parseInt(this.getAttribute('data-price'));
-        productCount = document.getElementById(`product-count-${id}`);
-        productCount.value = parseInt(productCount.value) - 1;
-
-        if(productCount.value < 0 )
-        {
-            productCount.value = 0;
-        }
-        totalProductPrice = document.getElementById(`product-price-${id}`);
-        totalProductPrice.innerHTML =`$ ${ (price * parseFloat(productCount.value)).toFixed(2) }`;
-        updateSubtotal();
-    });
-});
 
 document.querySelectorAll('.remove-cart').forEach(button => {
     button.addEventListener('click',function(){
@@ -62,18 +46,36 @@ function getCSRFToken() {
     return csrfToken ? csrfToken.value : '';
 }
 
+
+document.querySelectorAll('.decrease').forEach(button => {
+    button.addEventListener('click', function() {
+        const id = parseInt(this.getAttribute('data-id'));
+        const price = parseInt(this.getAttribute('data-price'));
+        let productCount = document.getElementById(`product-count-${id}`);
+        productCount.value = parseInt(productCount.value) - 1;
+
+        if(productCount.value <= 0 )
+        {
+            productCount.value = 1;
+        }
+        let totalProductPrice = document.getElementById(`product-price-${id}`);
+        totalProductPrice.innerHTML =`$ ${ (price * parseFloat(productCount.value)).toFixed(2) }`;
+        updateSubtotal();
+    });
+});
+
 document.querySelectorAll('.increase').forEach(button => {
     button.addEventListener('click', function() {
         const id = parseInt(this.getAttribute('data-id'));
         const price = parseFloat(this.getAttribute('data-price'));
-        productCount = document.getElementById(`product-count-${id}`);
+        let productCount = document.getElementById(`product-count-${id}`);
         productCount.value = parseInt(productCount.value) + 1;
 
-        if(productCount.value <0 )
+        if(productCount.value < 1 )
         {
-            productCount.value = 0;
+            productCount.value = 1;
         }
-        totalProductPrice = document.getElementById(`product-price-${id}`);
+        let totalProductPrice = document.getElementById(`product-price-${id}`);
         totalProductPrice.innerHTML =`$ ${ (price * parseFloat(productCount.value)).toFixed(2) }`;
         updateSubtotal();
     });

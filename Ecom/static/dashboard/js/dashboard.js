@@ -6,11 +6,6 @@ window.addEventListener('DOMContentLoaded', function() {
     document.body.addEventListener('click', (event) => {
 
         const productCard = event.target.closest('.product-card');
-        if(productCard){
-            const id = productCard.dataset.id;
-            console.log(id);
-            window.location.href = `${window.location.origin}/products/${id}`;   
-        }
         
         if (event.target.classList.contains('add-to-cart-btn')) {
             fetch(`${baseUrl}/add_to_cart/`, {
@@ -45,6 +40,13 @@ window.addEventListener('DOMContentLoaded', function() {
                 console.error('Error adding item to cart:', error);
             });
         }
+
+        else if(productCard){
+            const id = productCard.dataset.id;
+            console.log(id);
+            window.location.href = `${window.location.origin}/products/${id}`;   
+        }
+        
 
 
     });

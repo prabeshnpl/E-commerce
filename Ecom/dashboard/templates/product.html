@@ -87,7 +87,7 @@
       
       <div class="action-buttons">
         <button class="btn btn-buy">Buy Now</button>
-        <button class="btn btn-cart">Add to Cart</button>
+        <button class="btn btn-cart" id="addToCart" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price }}" data-iamge="{{ product.image }}">Add to Cart</button>
       </div>
       
       <div class="delivery-section">
@@ -142,6 +142,48 @@
     </div>
   </div>
 
+
+  <script>
+    document.getElementById('addToCart').addEventListener('click',()=>{
+      fetch(`${window.location.origin}/add_to_cart/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken':getCSRFToken()
+                },
+                body: JSON.stringify({
+                    id: event.target.dataset.id,
+                    name: event.target.dataset.name,
+                    price: event.target.dataset.price,
+                    image: event.target.dataset.image
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Item added to cart:', data);
+                const successMessageContainer = document.createElement('div');
+                const successMessage = document.createElement('div');
+                successMessage.textContent = 'Item added to cart successfully!';
+                successMessage.className = 'message-success';
+                successMessageContainer.className = 'message-container';
+                successMessageContainer.prepend(successMessage);
+                document.body.prepend(successMessageContainer);
+
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 1500);
+            })
+            .catch(error => {
+                console.error('Error adding item to cart:', error);
+            });
+    });
+
+    function getCSRFToken() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+        return csrfToken ? csrfToken.value : '';
+    };
+  </script>
+
   <script>
     // Handle quantity buttons
     document.getElementById('decrease').addEventListener('click', function() {
@@ -172,11 +214,6 @@
         // For this demonstration, we'll just log it
         console.log('Thumbnail clicked');
       });
-    });
-    
-    // Simulate Add to Cart functionality for now
-    document.querySelector('.btn-cart').addEventListener('click', function() {
-      alert('Item added to cart!');
     });
     
     // Simulate Buy Now functionality for now

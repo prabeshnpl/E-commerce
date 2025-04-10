@@ -57,6 +57,9 @@ def products(request,pk):
     
     return render(request,'product.html',{'product':product})
 
+@login_required(redirect_field_name='login')
+def seller(request):
+    return render(request,'seller.html')
 
 @login_required(redirect_field_name='login')
 def cart(request):
