@@ -52,7 +52,7 @@ def Logout(request):
 def home(request):
     return render(request, 'dashboard.html')
 
-@login_required(login_url='login/')
+@login_required(redirect_field_name='login')
 def cart(request):
     try:
         cart_obj = get_object_or_404(Cart,user=request.user)
@@ -70,7 +70,7 @@ def load_products(request):
     products = list(page.object_list.values('id','name','image','price','description','stock'))
     return JsonResponse({'products':products,'has_next':page.has_next()})
 
-@login_required(login_url='login/')
+@login_required(redirect_field_name='login')
 def add_to_cart(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -82,5 +82,15 @@ def add_to_cart(request):
         return JsonResponse({'message':data})
     return JsonResponse({'message':'error occured'})
 
-
+@login_required(redirect_field_name='login')
+def remove_cart(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        id = data.get('id')
+        product = Product.objects.get(id=id)
+        cart = Cart.objects.get(user=request.user)
+        cart.products.remove(product)
+        cart.save()
+        return JsonResponse({"Message":'Removed successfully'})
+        
 

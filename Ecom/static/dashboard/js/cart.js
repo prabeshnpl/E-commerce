@@ -16,6 +16,52 @@ document.querySelectorAll('.decrease').forEach(button => {
     });
 });
 
+document.querySelectorAll('.remove-cart').forEach(button => {
+    button.addEventListener('click',function(){
+        if (window.confirm("Are you sure you want to remove this item from the cart?")) {
+            const id = parseInt(this.getAttribute('data-id'));
+
+            fetch(`${window.location.origin}/remove_cart/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken':getCSRFToken()
+                },
+                body: JSON.stringify({
+                    id:id,
+                })
+            })
+            .then(response => response.json())
+            .then( data => {
+                console.log(`Message: ${data}`)
+                const successMessageContainer = document.createElement('div');
+                const successMessage = document.createElement('div');
+                successMessage.textContent = 'Item removed from cart !';
+                successMessage.className = 'message-success';
+                successMessageContainer.className = 'message-container';
+                successMessageContainer.prepend(successMessage);
+                document.body.prepend(successMessageContainer);
+
+                setTimeout(() => {
+                    successMessage.remove();
+                    window.location.href = window.location;
+                }, 1500);
+            })
+            .catch(error => {
+                console.error('Error adding item to cart:', error);
+            });
+
+            updateSubtotal();
+
+            
+        } })
+})
+
+function getCSRFToken() {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+    return csrfToken ? csrfToken.value : '';
+}
+
 document.querySelectorAll('.increase').forEach(button => {
     button.addEventListener('click', function() {
         const id = parseInt(this.getAttribute('data-id'));

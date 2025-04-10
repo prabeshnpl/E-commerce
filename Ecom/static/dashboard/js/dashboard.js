@@ -21,14 +21,17 @@ window.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 console.log('Item added to cart:', data);
+                const successMessageContainer = document.createElement('div');
                 const successMessage = document.createElement('div');
                 successMessage.textContent = 'Item added to cart successfully!';
                 successMessage.className = 'message-success';
-                document.body.prepend(successMessage);
+                successMessageContainer.className = 'message-container';
+                successMessageContainer.prepend(successMessage);
+                document.body.prepend(successMessageContainer);
 
                 setTimeout(() => {
                     successMessage.remove();
-                }, 3000);
+                }, 1500);
             })
             .catch(error => {
                 console.error('Error adding item to cart:', error);
