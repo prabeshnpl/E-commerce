@@ -75,7 +75,7 @@ window.addEventListener('DOMContentLoaded', function() {
         const spinner = document.getElementById('spinner')
         spinner.style.display = 'block';
         
-        fetch(`${baseUrl}/products/?page=${currentPage}`)
+        fetch(`${baseUrl}/load_products/?page=${currentPage}`)
 
         .then(response => response.json())
         .then(data => {

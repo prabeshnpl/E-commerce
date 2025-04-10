@@ -52,6 +52,12 @@ def Logout(request):
 def home(request):
     return render(request, 'dashboard.html')
 
+def products(request,pk):
+    product = Product.objects.get(id=pk)
+    
+    return render(request,'product.html',{'product':product})
+
+
 @login_required(redirect_field_name='login')
 def cart(request):
     try:

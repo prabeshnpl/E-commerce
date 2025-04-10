@@ -14,9 +14,11 @@ class CustomUser(AbstractUser):
 
 class Product(models.Model):
     name = models.CharField(max_length=64)
+    brand = models.CharField(max_length=64,default='Django')
     price = models.FloatField()
     description = models.TextField()
     image = models.ImageField(upload_to='product_images/')
+
     stock = models.IntegerField()
 
     def __str__(self):
