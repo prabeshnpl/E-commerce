@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
 import json
+from .forms import RegisterSellerForm
 # Create your views here.
 
 def Login(request):
@@ -27,6 +28,7 @@ def Login(request):
         elif request.POST.get('type') == 'register':
             full_name = request.POST.get('fullname')
             email = request.POST.get('email')
+            phone = request.POST.get('phone')
             password = request.POST.get('password')
             confirm_password = request.POST.get('confirm-password')
             if password != confirm_password:
@@ -34,7 +36,7 @@ def Login(request):
                 return render(request,'login.html')
             try:
 
-                user = CustomUser.objects.create(first_name=full_name, email=email)
+                user = CustomUser.objects.create(first_name=full_name, email=email, phone=phone)
                 user.set_password(password)
                 user.save()
                 if user:
@@ -53,13 +55,24 @@ def home(request):
     return render(request, 'dashboard.html')
 
 def products(request,pk):
-    product = Product.objects.get(id=pk)
-    
+    product = Product.objects.get(id=pk)    
     return render(request,'product.html',{'product':product})
 
 @login_required(redirect_field_name='login')
 def seller(request):
-    return render(request,'seller.html')
+    form = RegisterSellerForm()
+    if request.method == 'POST':
+        form = RegisterSellerForm(request.POST, request.FILES)
+        if form.is_valid():
+            seller = form.save(registered_by=request.user)
+        else:
+            messages.error(request,form.errors)
+            return render(request,'seller.html',{'form' : form ,})
+
+        messages.success(request,'Sucessfully Submitted ! Please wait for the teams\' review.')
+        return redirect('seller')
+
+    return render(request,'seller.html',{'form' : form ,})
 
 @login_required(redirect_field_name='login')
 def cart(request):

@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
 </head>
 <body>
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
     {% if messages %}
         {% for message in messages %}
@@ -62,112 +61,113 @@
                 <p>Add your products and start selling to customers right away!</p>
             </div>
         </div>
+
+        {% if not request.user.seller.verified %}
+            <div class="response">
+                <h2 class="highlight-green">Your request is being processed.</h2>
+                <p>Please wait patiently and try not to submit multiple forms.</p>
+                <p>Thank you</p>
+                <br>
+            </div>
+        {% elif request.user.seller.verified %}
+            <div class="response">
+                <h2 class="highlight-green">Your request is accepted.</h2>
+                <p>You are now a seller</p>
+                <p>Congratulations</p>
+                <br>
+            </div>
+        {% else %}
+            <div class="response">
+                <h2>Please register</h2>
+            </div>
+        {% endif %}
         
         <div class="registration-form">
             <h2>Seller Registration Form</h2>
-            <form id="seller-form">
-                <h3>Personal Information</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="first-name">First Name*</label>
-                        <input type="text" id="first-name" name="first-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="last-name">Last Name*</label>
-                        <input type="text" id="last-name" name="last-name" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email Address*</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="phone">Phone Number*</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Create Password*</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                </div>
-                
-                <h3 style="margin-top: 30px;">Business Information</h3>
-                <div class="form-group">
-                    <label for="business-name">Business/Store Name*</label>
-                    <input type="text" id="business-name" name="business-name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="business-type">Business Type*</label>
-                    <select id="business-type" name="business-type" required>
-                        <option value="">Select Business Type</option>
-                        <option value="individual">Individual/Sole Proprietor</option>
-                        <option value="partnership">Partnership</option>
-                        <option value="llc">Limited Liability Company (LLC)</option>
-                        <option value="corporation">Corporation</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="business-address">Business Address*</label>
-                    <input type="text" id="business-address" name="business-address" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="city">City*</label>
-                        <input type="text" id="city" name="city" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="state">State/Province*</label>
-                        <input type="text" id="state" name="state" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="zip">ZIP/Postal Code*</label>
-                        <input type="text" id="zip" name="zip" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="business-description">Business Description*</label>
-                    <textarea id="business-description" name="business-description" rows="4" required></textarea>
-                </div>
-                
-                <h3 style="margin-top: 30px;">Product Information</h3>
-                <div class="form-group">
-                    <label for="product-category">Primary Product Category*</label>
-                    <select id="product-category" name="product-category" required>
-                        <option value="">Select Category</option>
-                        <option value="clothing">Clothing & Apparel</option>
-                        <option value="electronics">Electronics</option>
-                        <option value="home">Home & Garden</option>
-                        <option value="beauty">Beauty & Personal Care</option>
-                        <option value="shoes">Shoes & Accessories</option>
-                        <option value="toys">Toys & Games</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Upload Business Documents</label>
-                    <div class="file-upload">
-                        <input type="file" id="business-docs" name="business-docs">
-                        <span>Click to upload or drag and drop</span>
-                        <span class="file-upload-label">Business registration, tax ID, or other related documents</span>
-                    </div>
-                </div>
-                
-                <div class="terms-container">
-                    <input type="checkbox" id="terms" name="terms" required>
-                    <label for="terms">I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Seller Policy</a>. I confirm that all information provided is accurate and complete.</label>
-                </div>
-                
-                <button type="submit" class="submit-btn">Submit Application</button>
-            </form>
+            <br>
+            
+                    <form id="seller-form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h3>Personal Information</h3>
+                        <br>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address*</label>
+                                <input type="email" id="email" name="email" value="{{ request.user.email }}" readonly required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">Full Name*</label>
+                                <input type="text" id="first-name" name="first-name" value="{{ request.user.first_name }}" readonly required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number*</label>
+                                <input type="tel" id="phone" name="phone" value="{{ request.user.phone_no }}" readonly required>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin-top: 30px;">Business Information</h3>
+                        <br>
+                        <div class="form-group">
+                            {{ form.store_name.label }}
+                            {{ form.store_name }}
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form.business_type.label }}
+                            {{ form.business_type }}
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form.address.label }}
+                            {{ form.address }}
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                {{ form.city.label }}
+                                {{ form.city }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.province.label }}
+                                {{ form.province }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.postal_code.label }}
+                                {{ form.postal_code }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group"> 
+                            {{ form.business_description.label }}
+                            {{ form.business_description }}                    
+                        </div>
+                        
+                        <h3 style="margin-top: 30px;">Product Information</h3>
+                        <br>
+                        <div class="form-group">
+                            {{ form.primary_product_category.label }}
+                            {{ form.primary_product_category }}
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form.document.label }}
+                            <div class="file-upload">
+                                {{ form.document }}
+                                <span>Click to upload or drag and drop</span>
+                                <span class="file-upload-label">Business registration, tax ID, or other related documents</span>
+                            </div>
+                        </div>
+                        
+                        <div class="terms-container">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <label for="terms">I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Seller Policy</a>. I confirm that all information provided is accurate and complete.</label>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Submit Application</button>
+                    </form>
         </div>
         
         <div class="benefits">
@@ -211,47 +211,72 @@
     </footer>
     
     <script>
-        document.getElementById('seller-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // document.getElementById('seller-form').addEventListener('submit', function(e) {
+        //     e.preventDefault();
             
-            // Basic form validation
-            let firstName = document.getElementById('first-name').value;
-            let lastName = document.getElementById('last-name').value;
-            let email = document.getElementById('email').value;
-            let phone = document.getElementById('phone').value;
-            let password = document.getElementById('password').value;
-            let businessName = document.getElementById('business-name').value;
+        //     // Basic form validation
+        //     let firstName = document.getElementById('first-name').value;
+        //     let lastName = document.getElementById('last-name').value;
+        //     let email = document.getElementById('email').value;
+        //     let phone = document.getElementById('phone').value;
+        //     let password = document.getElementById('password').value;
+        //     let businessName = document.getElementById('business-name').value;
             
-            if (!firstName || !lastName || !email || !phone || !password || !businessName) {
-                alert('Please fill in all required fields');
-                return;
-            }
+        //     if (!firstName || !lastName || !email || !phone || !password || !businessName) {
+        //         alert('Please fill in all required fields');
+        //         return;
+        //     }
             
-            // Email validation
-            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(email)) {
-                alert('Please enter a valid email address');
-                return;
-            }
+        //     // Email validation
+        //     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        //     if (!emailPattern.test(email)) {
+        //         alert('Please enter a valid email address');
+        //         return;
+        //     }
             
-            // Password validation (minimum 8 characters)
-            if (password.length < 8) {
-                alert('Password must be at least 8 characters long');
-                return;
-            }
+        //     // Password validation (minimum 8 characters)
+        //     if (password.length < 8) {
+        //         alert('Password must be at least 8 characters long');
+        //         return;
+        //     }
             
-            // If validation passes, show success message
-            alert('Application submitted successfully! We will review your information and contact you soon.');
+        //     // If validation passes, show success message
+        //     alert('Application submitted successfully! We will review your information and contact you soon.');
             
-            // Here you would normally send the form data to your server via AJAX
-            // For demonstration purposes we're just showing the alert
-        });
+        //     // Here you would normally send the form data to your server via AJAX
+        //     // For demonstration purposes we're just showing the alert
+        // });
         
         // Display file name when a file is selected
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const fileInput = document.querySelector(".file-upload input[type='file']");
+            const uploadText = document.querySelector(".file-upload span:first-of-type");
+            const labelText = document.querySelector(".file-upload span.file-upload-label");
+
+            fileInput.addEventListener("change", function () {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    uploadText.textContent = `Uploaded: ${file.name}`;
+                    labelText.textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
+                } else {
+                    uploadText.textContent = "Click to upload or drag and drop";
+                    labelText.textContent = "Business registration, tax ID, or other related documents";
+                }
+            });
+        });
+
         document.getElementById('business-docs').addEventListener('change', function() {
             let fileName = this.files[0] ? this.files[0].name : 'No file selected';
             this.nextElementSibling.textContent = fileName;
         });
+
+        message = document.querySelector('.message-success')
+        if(message){
+            setTimeout(()=>{
+                message.style.display = 'none';
+            },1500)
+        }
     </script>
 </body>
 </html>
