@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'dashboard/css/add_products.css' %}">
+{% endblock %}
+
+{% block maincontent %}
+<div class="main-content">
+    <div class="success-msg" id="successMessage">
+        Product has been successfully added to the marketplace!
+    </div>
+    
+    <h1>Add New Product</h1>
+    
+    <form id="addProductForm">
+        <div class="form-group">
+            <label for="productName">Product Name*</label>
+            <input type="text" id="productName" name="productName" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="productCategory">Category*</label>
+            <select id="productCategory" name="productCategory" required>
+                <option value="">Select a category</option>
+                <option value="clothing">Clothing</option>
+                <option value="electronics">Electronics</option>
+                <option value="accessories">Accessories</option>
+                <option value="footwear">Footwear</option>
+                <option value="watches">Watches</option>
+                <option value="bags">Bags</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="productPrice">Price ($)*</label>
+            <input type="number" id="productPrice" name="productPrice" min="0" step="0.01" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="productStock">Stock Quantity*</label>
+            <input type="number" id="productStock" name="productStock" min="1" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="productDescription">Product Description*</label>
+            <textarea id="productDescription" name="productDescription" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>Product Images*</label>
+            <div class="image-upload">
+                <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
+                <p style="color: #666; font-size: 14px;">Upload up to 5 images. First image will be used as the main product image.</p>
+                <div class="image-preview">
+                    <div class="preview-box">Preview 1</div>
+                    <div class="preview-box">Preview 2</div>
+                    <div class="preview-box">Preview 3</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="productFeatures">Key Features</label>
+            <textarea id="productFeatures" name="productFeatures" placeholder="Enter each feature on a new line"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>Product Status</label>
+            <div style="display: flex; gap: 20px; margin-top: 10px;">
+                <label style="display: flex; align-items: center; gap: 5px;">
+                    <input type="radio" name="productStatus" value="active" checked>
+                    Active
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px;">
+                    <input type="radio" name="productStatus" value="draft">
+                    Save as Draft
+                </label>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Product</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Simple preview functionality for demonstration
+    document.getElementById('productImages').addEventListener('change', function(e) {
+        const previewBoxes = document.querySelectorAll('.preview-box');
+        const files = e.target.files;
+        
+        for (let i = 0; i < Math.min(files.length, previewBoxes.length); i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewBoxes[i].innerHTML = '';
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '100%';
+                previewBoxes[i].appendChild(img);
+            }
+            
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Form submission handler
+    document.getElementById('addProductForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Basic validation
+        const requiredFields = document.querySelectorAll('[required]');
+        let valid = true;
+        
+        requiredFields.forEach(field => {
+            if (!field.value) {
+                valid = false;
+                field.style.borderColor = 'red';
+            } else {
+                field.style.borderColor = '#ddd';
+            }
+        });
+        
+        if (valid) {
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // In a real implementation, you would submit the form data to the server here
+            // Reset form after short delay
+            setTimeout(() => {
+                document.getElementById('addProductForm').reset();
+                document.getElementById('successMessage').style.display = 'none';
+                
+                // Reset image previews
+                const previewBoxes = document.querySelectorAll('.preview-box');
+                previewBoxes.forEach(box => {
+                    box.innerHTML = box.getAttribute('data-default') || 'Preview';
+                });
+            }, 3000);
+        }
+    });
+</script>
+{% endblock %}

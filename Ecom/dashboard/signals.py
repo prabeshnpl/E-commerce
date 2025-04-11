@@ -10,4 +10,6 @@ def create_Cart(sender,instance,created,**kwargs):
 @receiver(post_save,sender=RegisterSeller)
 def update_user(sender,instance,created,**kwargs):
     if not created and instance.verified :
-        instance.registered_by.is_seller = True
+        user = instance.registered_by
+        user.is_seller = True 
+        user.save()

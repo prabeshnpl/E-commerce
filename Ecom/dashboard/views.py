@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.core.paginator import Paginator
-from .models import CustomUser, Cart, Product
+from .models import CustomUser, Cart, Product,RegisterSeller
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate
@@ -43,7 +43,10 @@ def Login(request):
                     messages.success(request,'Account Registration Successful ! ')
 
             except Exception as e:
-                messages.error(request,str(e))
+                if 'UNIQUE constraint failed' in str(e):
+                    messages.error(request,'Email and phone number must be unique.')
+                else:
+                    messages.error(request,str(e))
 
     return render(request,'login.html')
 
@@ -58,21 +61,31 @@ def products(request,pk):
     product = Product.objects.get(id=pk)    
     return render(request,'product.html',{'product':product})
 
+def add_products(request):
+    return render(request,'add_products.html')
+
 @login_required(redirect_field_name='login')
 def seller(request):
-    form = RegisterSellerForm()
+    filled = False
+    if RegisterSeller.objects.filter(registered_by = request.user).exists():
+        filled = True
     if request.method == 'POST':
-        form = RegisterSellerForm(request.POST, request.FILES)
-        if form.is_valid():
-            seller = form.save(registered_by=request.user)
+        if not filled:
+            form = RegisterSellerForm(request.POST, request.FILES)
+            if form.is_valid():
+                seller = form.save(registered_by=request.user)
+                messages.success(request,'Sucessfully Submitted ! Please wait for the teams\' review.')
+            else:
+                messages.error(request,form.errors)
         else:
-            messages.error(request,form.errors)
-            return render(request,'seller.html',{'form' : form ,})
+            messages.error(request,'Form already filled. Please wait a while. ')
 
-        messages.success(request,'Sucessfully Submitted ! Please wait for the teams\' review.')
         return redirect('seller')
-
-    return render(request,'seller.html',{'form' : form ,})
+    
+    else:
+        form = RegisterSellerForm()
+            
+    return render(request,'seller.html',{'form' : form ,'filled':filled})
 
 @login_required(redirect_field_name='login')
 def cart(request):

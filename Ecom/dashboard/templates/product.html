@@ -1,228 +1,189 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-commerce Store</title>
-  {% load static %}
+{% extends 'base.html' %}
+{% load static %}
 
-  <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
-  <link rel="stylesheet" href="{% static 'dashboard/css/product.css' %}">
+{% block css %}
+<link rel="stylesheet" href="{% static 'dashboard/css/product.css' %}">
+{% endblock %}
+
+{% block maincontent %}
+<div class="product-container">
+  <div class="product-gallery">
+    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="main-image">
+    
+    <div class="thumbnail-container">
+      <div class="thumbnail-nav thumbnail-prev">❮</div>
+      <img src="{{ product.image.url }}" alt="Thumbnail 1" class="thumbnail active">
+      <img src="{{ product.image.url }}" alt="Thumbnail 2" class="thumbnail">
+      <img src="{{ product.image.url }}" alt="Thumbnail 3" class="thumbnail">
+      <img src="{{ product.image.url }}" alt="Thumbnail 4" class="thumbnail">
+      <div class="thumbnail-nav thumbnail-next">❯</div>
+    </div>
+  </div>
   
-</head>
-
-
-<body>
-  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message-{{ message.tags }}">
-                <p>{{ message }}</p>
-            </div>
-        {% endfor %}
-    {% endif %}
-    <header>
-        <div class="logo">LOGO</div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-        <div class="search-box">
-            <input type="text" placeholder="Search...">
-            <button>🔍</button>
-        </div>
-        <nav id="mainNav">
-            <ul>
-                <li><a href="{% url 'home' %}" class="nav-link" data-page="home">Home</a></li>
-                <li><a href="{% url 'cart' %}" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
-                <li><a href="#" class="nav-link" data-page="about">About</a></li>
-                <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
-                {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-                <li><a href="#">Be a Seller</a></li>
-            </ul>
-        </nav>
-    </header>
-
-  <div class="product-container">
-    <div class="product-gallery">
-      <img src="{{ product.image.url }}" alt="{{ product.name }}" class="main-image">
-      
-      <div class="thumbnail-container">
-        <div class="thumbnail-nav thumbnail-prev">❮</div>
-        <img src="{{ product.image.url }}" alt="Thumbnail 1" class="thumbnail active">
-        <img src="{{ product.image.url }}" alt="Thumbnail 2" class="thumbnail">
-        <img src="{{ product.image.url }}" alt="Thumbnail 3" class="thumbnail">
-        <img src="{{ product.image.url }}" alt="Thumbnail 4" class="thumbnail">
-        <div class="thumbnail-nav thumbnail-next">❯</div>
+  <div class="product-details">
+    <h1 class="product-title">{{ product.name }}</h1>
+    
+    <div class="rating">
+      <span class="star">★★★★★</span>
+      <a href="#" class="ratings-count">Ratings 1</a>
+    </div>
+    
+    <div class="brand-info">
+      Brand: <a href="#" class="brand-link">Django</a> | <a href="#" class="brand-link">More Products from this brand</a>
+    </div>
+    
+    <div class="price-container">
+      <span class="current-price">Rs.{{ product.price }}</span>
+      <span class="original-price">Rs. 400</span>
+      <span class="discount">-75%</span>
+    </div>
+    
+    <div class="quantity-container">
+      <span class="quantity-label">Quantity</span>
+      <div class="quantity-controls">
+        <button class="quantity-btn" id="decrease">−</button>
+        <input type="text" class="quantity-input" value="1" id="quantity">
+        <button class="quantity-btn" id="increase">+</button>
       </div>
     </div>
     
-    <div class="product-details">
-      <h1 class="product-title">{{ product.name }}</h1>
-      
-      <div class="rating">
-        <span class="star">★★★★★</span>
-        <a href="#" class="ratings-count">Ratings 1</a>
-      </div>
-      
-      <div class="brand-info">
-        Brand: <a href="#" class="brand-link">Django</a> | <a href="#" class="brand-link">More Products from this brand</a>
-      </div>
-      
-      <div class="price-container">
-        <span class="current-price">Rs.{{ product.price }}</span>
-        <span class="original-price">Rs. 400</span>
-        <span class="discount">-75%</span>
-      </div>
-      
-      <div class="quantity-container">
-        <span class="quantity-label">Quantity</span>
-        <div class="quantity-controls">
-          <button class="quantity-btn" id="decrease">−</button>
-          <input type="text" class="quantity-input" value="1" id="quantity">
-          <button class="quantity-btn" id="increase">+</button>
-        </div>
-      </div>
-      
-      <div class="action-buttons">
-        <button class="btn btn-buy">Buy Now</button>
-        <button class="btn btn-cart" id="addToCart" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price }}" data-iamge="{{ product.image }}">Add to Cart</button>
-      </div>
-      
-      <div class="delivery-section">
-        <div class="section-title">
-          <span>Delivery Options</span>
-          <span class="info-icon">ⓘ</span>
-        </div>
-        
-        <div class="address-container">
-          <span>📍</span>
-          <div>
-            <div>Bagmati, Kathmandu Metro</div>
-            <div>22 - Newroad Area, Newroad</div>
-          </div>
-          <a href="#" style="margin-left: auto; color: #0066c0;">CHANGE</a>
-        </div>
-        
-        <div class="delivery-info">
-          <span class="delivery-icon">🚚</span>
-          <div>
-            <div>Standard Delivery</div>
-            <div style="color: #666; font-size: 12px;">Guaranteed by 14-16 Apr</div>
-          </div>
-          <div style="margin-left: auto;">
-            <div>Rs. 135</div>
-          </div>
-        </div>
-        
-        <div class="delivery-info">
-          <span class="delivery-icon">💰</span>
-          <div>Cash on Delivery Available</div>
-        </div>
-      </div>
-      
-      <div class="return-section">
-        <div class="section-title">
-          <span>Return & Warranty</span>
-          <span class="info-icon">ⓘ</span>
-        </div>
-        
-        <div class="return-info">
-          <span class="return-icon">🔄</span>
-          <div>14 Days Free Returns</div>
-        </div>
-        
-        <div class="return-info">
-          <span class="return-icon">⚠️</span>
-          <div>Warranty not available</div>
-        </div>
-      </div>
-      
+    <div class="action-buttons">
+      <button class="btn btn-buy">Buy Now</button>
+      <button class="btn btn-cart" id="addToCart" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price }}" data-iamge="{{ product.image }}">Add to Cart</button>
     </div>
+    
+    <div class="delivery-section">
+      <div class="section-title">
+        <span>Delivery Options</span>
+        <span class="info-icon">ⓘ</span>
+      </div>
+      
+      <div class="address-container">
+        <span>📍</span>
+        <div>
+          <div>Bagmati, Kathmandu Metro</div>
+          <div>22 - Newroad Area, Newroad</div>
+        </div>
+        <a href="#" style="margin-left: auto; color: #0066c0;">CHANGE</a>
+      </div>
+      
+      <div class="delivery-info">
+        <span class="delivery-icon">🚚</span>
+        <div>
+          <div>Standard Delivery</div>
+          <div style="color: #666; font-size: 12px;">Guaranteed by 14-16 Apr</div>
+        </div>
+        <div style="margin-left: auto;">
+          <div>Rs. 135</div>
+        </div>
+      </div>
+      
+      <div class="delivery-info">
+        <span class="delivery-icon">💰</span>
+        <div>Cash on Delivery Available</div>
+      </div>
+    </div>
+    
+    <div class="return-section">
+      <div class="section-title">
+        <span>Return & Warranty</span>
+        <span class="info-icon">ⓘ</span>
+      </div>
+      
+      <div class="return-info">
+        <span class="return-icon">🔄</span>
+        <div>14 Days Free Returns</div>
+      </div>
+      
+      <div class="return-info">
+        <span class="return-icon">⚠️</span>
+        <div>Warranty not available</div>
+      </div>
+    </div>
+    
   </div>
-  <div class="product-description">
-    {{ product.description }}
-  </div>
+</div>
+<div class="product-description">
+  {{ product.description }}
+</div>
 
 
-  <script>
-    document.getElementById('addToCart').addEventListener('click',()=>{
-      fetch(`${window.location.origin}/add_to_cart/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken':getCSRFToken()
-                },
-                body: JSON.stringify({
-                    id: event.target.dataset.id,
-                    name: event.target.dataset.name,
-                    price: event.target.dataset.price,
-                    image: event.target.dataset.image
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Item added to cart:', data);
-                const successMessageContainer = document.createElement('div');
-                const successMessage = document.createElement('div');
-                successMessage.textContent = 'Item added to cart successfully!';
-                successMessage.className = 'message-success';
-                successMessageContainer.className = 'message-container';
-                successMessageContainer.prepend(successMessage);
-                document.body.prepend(successMessageContainer);
+<script>
+  document.getElementById('addToCart').addEventListener('click',()=>{
+    fetch(`${window.location.origin}/add_to_cart/`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken':getCSRFToken()
+              },
+              body: JSON.stringify({
+                  id: event.target.dataset.id,
+                  name: event.target.dataset.name,
+                  price: event.target.dataset.price,
+                  image: event.target.dataset.image
+              })
+          })
+          .then(response => response.json())
+          .then(data => {
+              console.log('Item added to cart:', data);
+              const successMessageContainer = document.createElement('div');
+              const successMessage = document.createElement('div');
+              successMessage.textContent = 'Item added to cart successfully!';
+              successMessage.className = 'message-success';
+              successMessageContainer.className = 'message-container';
+              successMessageContainer.prepend(successMessage);
+              document.body.prepend(successMessageContainer);
 
-                setTimeout(() => {
-                    successMessage.remove();
-                }, 1500);
-            })
-            .catch(error => {
-                console.error('Error adding item to cart:', error);
-            });
-    });
+              setTimeout(() => {
+                  successMessage.remove();
+              }, 1500);
+          })
+          .catch(error => {
+              console.error('Error adding item to cart:', error);
+          });
+  });
 
-    function getCSRFToken() {
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
-        return csrfToken ? csrfToken.value : '';
-    };
-  </script>
+  function getCSRFToken() {
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+      return csrfToken ? csrfToken.value : '';
+  };
+</script>
 
-  <script>
-    // Handle quantity buttons
-    document.getElementById('decrease').addEventListener('click', function() {
-      const input = document.getElementById('quantity');
-      const value = parseInt(input.value);
-      if (value > 1) {
-        input.value = value - 1;
-      }
+<script>
+  // Handle quantity buttons
+  document.getElementById('decrease').addEventListener('click', function() {
+    const input = document.getElementById('quantity');
+    const value = parseInt(input.value);
+    if (value > 1) {
+      input.value = value - 1;
+    }
+  });
+  
+  document.getElementById('increase').addEventListener('click', function() {
+    const input = document.getElementById('quantity');
+    const value = parseInt(input.value);
+    input.value = value + 1;
+  });
+  
+  // Handle thumbnail clicks
+  const thumbnails = document.querySelectorAll('.thumbnail');
+  thumbnails.forEach(thumb => {
+    thumb.addEventListener('click', function() {
+      // Remove active class from all thumbnails
+      thumbnails.forEach(t => t.classList.remove('active'));
+      
+      // Add active class to clicked thumbnail
+      this.classList.add('active');
+      
+      // In a real implementation, this would change the main image
+      // For this demonstration, we'll just log it
+      console.log('Thumbnail clicked');
     });
-    
-    document.getElementById('increase').addEventListener('click', function() {
-      const input = document.getElementById('quantity');
-      const value = parseInt(input.value);
-      input.value = value + 1;
-    });
-    
-    // Handle thumbnail clicks
-    const thumbnails = document.querySelectorAll('.thumbnail');
-    thumbnails.forEach(thumb => {
-      thumb.addEventListener('click', function() {
-        // Remove active class from all thumbnails
-        thumbnails.forEach(t => t.classList.remove('active'));
-        
-        // Add active class to clicked thumbnail
-        this.classList.add('active');
-        
-        // In a real implementation, this would change the main image
-        // For this demonstration, we'll just log it
-        console.log('Thumbnail clicked');
-      });
-    });
-    
-    // Simulate Buy Now functionality for now
-    document.querySelector('.btn-buy').addEventListener('click', function() {
-      alert('Proceeding to checkout!');
-    });
-  </script>
-</body>
-</html>
+  });
+  
+  // Simulate Buy Now functionality for now
+  document.querySelector('.btn-buy').addEventListener('click', function() {
+    alert('Proceeding to checkout!');
+  });
+</script>
+{% endblock %}

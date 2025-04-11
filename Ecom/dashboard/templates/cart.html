@@ -1,111 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-commerce Store</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
+{% extends 'base.html' %}
+{% load static %}
 
-<body>
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+{% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message-{{ message.tags }}">
-                <p>{{ message }}</p>
-            </div>
-        {% endfor %}
-    {% endif %}
-    <header>
-        <div class="logo">LOGO</div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-        <div class="search-box">
-            <input type="text" placeholder="Search...">
-            <button>🔍</button>
-        </div>
-        <nav id="mainNav">
-            <ul>
-                <li><a href="{% url 'home' %}" class="nav-link" data-page="home">Home</a></li>
-                <li><a href="#" class="nav-link my-cart-btn active" data-page="shop">My Cart</a></li>
-                <li><a href="#" class="nav-link" data-page="about">About</a></li>
-                <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
-                {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-                <li><a href="{% url 'seller' %}">Be a Seller</a></li>
-            </ul>
-        </nav>
-    </header>
-    
-    <main>
-        <!-- Shopping Cart Page -->
-        <div class="cart-page" id="cartPage">
-            <h1>Shopping Cart</h1>
-            <div class="cart-container">
-                <table class="cart-table">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cartItems">
-                        {% if products %}
-                            {% for product in products %}
-                                <tr>
-                                    <td>
-                                        <div class="cart-product">
-                                            <div class="cart-product-image">
-                                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                                            </div>
-                                            <div>
-                                                <h3>{{ product.name }}</h3>
-                                            </div>
+{% block maincontent %}
+<main>
+    <!-- Shopping Cart Page -->
+    <div class="cart-page" id="cartPage">
+        <h1>Shopping Cart</h1>
+        <div class="cart-container">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems">
+                    {% if products %}
+                        {% for product in products %}
+                            <tr>
+                                <td>
+                                    <div class="cart-product">
+                                        <div class="cart-product-image">
+                                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
                                         </div>
-                                    </td>
-
-                                    <td>${{ product.price }}</td>
-
-                                    <td>
-                                        <div class="quantity-control">
-                                            <button class="quantity-btn decrease" data-id="{{ product.id }}" data-price="{{ product.price }}">-</button>
-                                            <input type="text" class="quantity-input" id="product-count-{{ product.id }}" value="1" readonly>
-                                            <button class="quantity-btn increase" data-id="{{ product.id }}" data-price="{{ product.price }}">+</button>
+                                        <div>
+                                            <h3>{{ product.name }}</h3>
                                         </div>
-                                    </td>
+                                    </div>
+                                </td>
 
-                                    <td id="product-price-{{ product.id }}" class="all-prices">${{ product.price }}</td>    
+                                <td>${{ product.price }}</td>
 
-                                    <td>
-                                        <span class="remove-cart" id="remove-cart" data-id="{{ product.id }}" style="cursor: pointer;">
-                                            <i class="bi bi-trash"></i>
-                                        </span>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr colspan="3">Empty Cart</tr>
-                            {% endfor %}
-                            
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="cart-summary">
-                <p class="subtotal">Subtotal: <span id="cartSubtotal">$0.00</span></p>
-                <button class="checkout-btn">Proceed to Checkout</button>
-            </div>
+                                <td>
+                                    <div class="quantity-control">
+                                        <button class="quantity-btn decrease" data-id="{{ product.id }}" data-price="{{ product.price }}">-</button>
+                                        <input type="text" class="quantity-input" id="product-count-{{ product.id }}" value="1" readonly>
+                                        <button class="quantity-btn increase" data-id="{{ product.id }}" data-price="{{ product.price }}">+</button>
+                                    </div>
+                                </td>
+
+                                <td id="product-price-{{ product.id }}" class="all-prices">${{ product.price }}</td>    
+
+                                <td>
+                                    <span class="remove-cart" id="remove-cart" data-id="{{ product.id }}" style="cursor: pointer;">
+                                        <i class="bi bi-trash"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr colspan="3">Empty Cart</tr>
+                        {% endfor %}
+                        
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
-    </main>
-     
-    <script src="{% static 'dashboard/js/cart.js' %}"></script>
-</body>
-</html>
+        
+        <div class="cart-summary">
+            <p class="subtotal">Subtotal: <span id="cartSubtotal">$0.00</span></p>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+</main>
+ 
+<script src="{% static 'dashboard/js/cart.js' %}"></script>
+{% endblock %}

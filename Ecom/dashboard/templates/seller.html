@@ -1,274 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Be a Seller - E-commerce Store</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'dashboard/css/seller.css' %}">
-    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message-{{ message.tags }}">
-                <p>{{ message }}</p>
-            </div>
-        {% endfor %}
-    {% endif %}
-    <header>
-        <div class="logo">LOGO</div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-        <div class="search-box">
-            <input type="text" placeholder="Search...">
-            <button>🔍</button>
-        </div>
-        <nav id="mainNav">
-            <ul>
-                <li><a href="{% url 'home' %}" class="nav-link" data-page="home">Home</a></li>
-                <li><a href="#" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
-                <li><a href="#" class="nav-link" data-page="about">About</a></li>
-                <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
-                {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-                <li class="active"><a href="#">Be a Seller</a></li>
-            </ul>
-        </nav>
-    </header>
+{% block css %}
+<link rel="stylesheet" href="{% static 'dashboard/css/seller.css' %}">
+{% endblock %}
+
+{% block maincontent %}
+<div class="main-content">
+    <h1>Become a Seller</h1>
+    <p>Join our marketplace and start selling your products to thousands of customers.</p>
     
-    <div class="main-content">
-        <h1>Become a Seller</h1>
-        <p>Join our marketplace and start selling your products to thousands of customers.</p>
-        
-        <div class="steps-container">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3>Register</h3>
-                <p>Fill out the registration form with your details and business information.</p>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3>Verification</h3>
-                <p>Our team verifies your information and approves your seller account.</p>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3>Start Selling</h3>
-                <p>Add your products and start selling to customers right away!</p>
-            </div>
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h3>Register</h3>
+            <p>Fill out the registration form with your details and business information.</p>
         </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <h3>Verification</h3>
+            <p>Our team verifies your information and approves your seller account.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <h3>Start Selling</h3>
+            <p>Add your products and start selling to customers right away!</p>
+        </div>
+    </div>
 
-        {% if not request.user.seller.verified %}
-            <div class="response">
-                <h2 class="highlight-green">Your request is being processed.</h2>
-                <p>Please wait patiently and try not to submit multiple forms.</p>
-                <p>Thank you</p>
-                <br>
-            </div>
-        {% elif request.user.seller.verified %}
-            <div class="response">
-                <h2 class="highlight-green">Your request is accepted.</h2>
-                <p>You are now a seller</p>
-                <p>Congratulations</p>
-                <br>
-            </div>
-        {% else %}
-            <div class="response">
-                <h2>Please register</h2>
-            </div>
-        {% endif %}
-        
-        <div class="registration-form">
-            <h2>Seller Registration Form</h2>
+    {% if request.user.is_seller %}
+        <div class="response">
+            <h2 class="highlight-green">Your request is accepted.</h2>
+            <p>You are now a seller</p>
+            <p>Congratulations</p>
             <br>
-            
-                    <form id="seller-form" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <h3>Personal Information</h3>
-                        <br>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="email">Email Address*</label>
-                                <input type="email" id="email" name="email" value="{{ request.user.email }}" readonly required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="first-name">Full Name*</label>
-                                <input type="text" id="first-name" name="first-name" value="{{ request.user.first_name }}" readonly required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number*</label>
-                                <input type="tel" id="phone" name="phone" value="{{ request.user.phone_no }}" readonly required>
-                            </div>
-                        </div>
-                        
-                        <h3 style="margin-top: 30px;">Business Information</h3>
-                        <br>
-                        <div class="form-group">
-                            {{ form.store_name.label }}
-                            {{ form.store_name }}
-                        </div>
-                        
-                        <div class="form-group">
-                            {{ form.business_type.label }}
-                            {{ form.business_type }}
-                        </div>
-                        
-                        <div class="form-group">
-                            {{ form.address.label }}
-                            {{ form.address }}
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                {{ form.city.label }}
-                                {{ form.city }}
-                            </div>
-                            <div class="form-group">
-                                {{ form.province.label }}
-                                {{ form.province }}
-                            </div>
-                            <div class="form-group">
-                                {{ form.postal_code.label }}
-                                {{ form.postal_code }}
-                            </div>
-                        </div>
-                        
-                        <div class="form-group"> 
-                            {{ form.business_description.label }}
-                            {{ form.business_description }}                    
-                        </div>
-                        
-                        <h3 style="margin-top: 30px;">Product Information</h3>
-                        <br>
-                        <div class="form-group">
-                            {{ form.primary_product_category.label }}
-                            {{ form.primary_product_category }}
-                        </div>
-                        
-                        <div class="form-group">
-                            {{ form.document.label }}
-                            <div class="file-upload">
-                                {{ form.document }}
-                                <span>Click to upload or drag and drop</span>
-                                <span class="file-upload-label">Business registration, tax ID, or other related documents</span>
-                            </div>
-                        </div>
-                        
-                        <div class="terms-container">
-                            <input type="checkbox" id="terms" name="terms" required>
-                            <label for="terms">I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Seller Policy</a>. I confirm that all information provided is accurate and complete.</label>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">Submit Application</button>
-                    </form>
+        </div>            
+    {% elif not request.user.is_seller and filled  %}
+        <div class="response">
+            <h2 class="highlight-green">Your request is being processed.</h2>
+            <p>Please wait patiently and try not to submit multiple forms.</p>
+            <p>Thank you</p>
+            <br>
         </div>
+    {% else %}
         
-        <div class="benefits">
-            <h2>Why Sell With Us?</h2>
-            <div class="benefits-container">
-                <div class="benefit">
-                    <div class="benefit-icon">💰</div>
-                    <h3>Low Commission</h3>
-                    <p>Enjoy competitive commission rates that maximize your profits.</p>
-                </div>
-                <div class="benefit">
-                    <div class="benefit-icon">🌐</div>
-                    <h3>Wide Reach</h3>
-                    <p>Access thousands of potential customers from all over the world.</p>
-                </div>
-                <div class="benefit">
-                    <div class="benefit-icon">📊</div>
-                    <h3>Analytics Dashboard</h3>
-                    <p>Track your sales and performance with powerful analytics tools.</p>
-                </div>
-                <div class="benefit">
-                    <div class="benefit-icon">🚚</div>
-                    <h3>Easy Shipping</h3>
-                    <p>Integrated shipping solutions to simplify your logistics.</p>
-                </div>
+    {% endif %}
+    
+    <div class="registration-form">
+        <h2>Seller Registration Form</h2>
+        <br>
+        
+                <form id="seller-form" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h3>Personal Information</h3>
+                    <br>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address*</label>
+                            <input type="email" id="email" name="email" value="{{ request.user.email }}" readonly required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">Full Name*</label>
+                            <input type="text" id="first-name" name="first-name" value="{{ request.user.first_name }}" readonly required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number*</label>
+                            <input type="tel" id="phone" name="phone" value="{{ request.user.phone }}" readonly required>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-top: 30px;">Business Information</h3>
+                    <br>
+                    <div class="form-group">
+                        {{ form.store_name.label }}
+                        {{ form.store_name }}
+                    </div>
+                    
+                    <div class="form-group">
+                        {{ form.business_type.label }}
+                        {{ form.business_type }}
+                    </div>
+                    
+                    <div class="form-group">
+                        {{ form.address.label }}
+                        {{ form.address }}
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            {{ form.city.label }}
+                            {{ form.city }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.province.label }}
+                            {{ form.province }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.postal_code.label }}
+                            {{ form.postal_code }}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group"> 
+                        {{ form.business_description.label }}
+                        {{ form.business_description }}                    
+                    </div>
+                    
+                    <h3 style="margin-top: 30px;">Product Information</h3>
+                    <br>
+                    <div class="form-group">
+                        {{ form.primary_product_category.label }}
+                        {{ form.primary_product_category }}
+                    </div>
+                    
+                    <div class="form-group">
+                        {{ form.document.label }}
+                        <div class="file-upload">
+                            {{ form.document }}
+                            <span>Click to upload or drag and drop</span>
+                            <span class="file-upload-label">Business registration, tax ID, or other related documents</span>
+                        </div>
+                    </div>
+                    
+                    <div class="terms-container">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Seller Policy</a>. I confirm that all information provided is accurate and complete.</label>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Submit Application</button>
+                </form>
+    </div>
+    
+    <div class="benefits">
+        <h2>Why Sell With Us?</h2>
+        <div class="benefits-container">
+            <div class="benefit">
+                <div class="benefit-icon">💰</div>
+                <h3>Low Commission</h3>
+                <p>Enjoy competitive commission rates that maximize your profits.</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">🌐</div>
+                <h3>Wide Reach</h3>
+                <p>Access thousands of potential customers from all over the world.</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">📊</div>
+                <h3>Analytics Dashboard</h3>
+                <p>Track your sales and performance with powerful analytics tools.</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">🚚</div>
+                <h3>Easy Shipping</h3>
+                <p>Integrated shipping solutions to simplify your logistics.</p>
             </div>
         </div>
     </div>
-    
-    <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#">Home</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
-                <a href="#">Terms & Conditions</a>
-                <a href="#">Privacy Policy</a>
-            </div>
-            <p>&copy; 2025 E-commerce Store. All rights reserved.</p>
+</div>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Privacy Policy</a>
         </div>
-    </footer>
-    
-    <script>
-        // document.getElementById('seller-form').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-            
-        //     // Basic form validation
-        //     let firstName = document.getElementById('first-name').value;
-        //     let lastName = document.getElementById('last-name').value;
-        //     let email = document.getElementById('email').value;
-        //     let phone = document.getElementById('phone').value;
-        //     let password = document.getElementById('password').value;
-        //     let businessName = document.getElementById('business-name').value;
-            
-        //     if (!firstName || !lastName || !email || !phone || !password || !businessName) {
-        //         alert('Please fill in all required fields');
-        //         return;
-        //     }
-            
-        //     // Email validation
-        //     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        //     if (!emailPattern.test(email)) {
-        //         alert('Please enter a valid email address');
-        //         return;
-        //     }
-            
-        //     // Password validation (minimum 8 characters)
-        //     if (password.length < 8) {
-        //         alert('Password must be at least 8 characters long');
-        //         return;
-        //     }
-            
-        //     // If validation passes, show success message
-        //     alert('Application submitted successfully! We will review your information and contact you soon.');
-            
-        //     // Here you would normally send the form data to your server via AJAX
-        //     // For demonstration purposes we're just showing the alert
-        // });
-        
-        // Display file name when a file is selected
+        <p>&copy; 2025 E-commerce Store. All rights reserved.</p>
+    </div>
+</footer>
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const fileInput = document.querySelector(".file-upload input[type='file']");
-            const uploadText = document.querySelector(".file-upload span:first-of-type");
-            const labelText = document.querySelector(".file-upload span.file-upload-label");
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const fileInput = document.querySelector(".file-upload input[type='file']");
+        const uploadText = document.querySelector(".file-upload span:first-of-type");
+        const labelText = document.querySelector(".file-upload span.file-upload-label");
 
-            fileInput.addEventListener("change", function () {
-                if (fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    uploadText.textContent = `Uploaded: ${file.name}`;
-                    labelText.textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
-                } else {
-                    uploadText.textContent = "Click to upload or drag and drop";
-                    labelText.textContent = "Business registration, tax ID, or other related documents";
-                }
-            });
-        });
-
-        document.getElementById('business-docs').addEventListener('change', function() {
-            let fileName = this.files[0] ? this.files[0].name : 'No file selected';
-            this.nextElementSibling.textContent = fileName;
+        fileInput.addEventListener("change", function () {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                uploadText.textContent = `Uploaded: ${file.name}`;
+                labelText.textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
+            } else {
+                uploadText.textContent = "Click to upload or drag and drop";
+                labelText.textContent = "Business registration, tax ID, or other related documents";
+            }
         });
 
         message = document.querySelector('.message-success')
@@ -277,6 +197,8 @@
                 message.style.display = 'none';
             },1500)
         }
-    </script>
-</body>
-</html>
+    });
+
+   
+</script>
+{% endblock %}

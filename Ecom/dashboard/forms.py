@@ -29,9 +29,9 @@ class RegisterSellerForm(forms.ModelForm):
             'registered_by': forms.TextInput(attrs={'type': "text", 'id': "registered-by"})
         }
 
-        def save(self, commit=True, **kwargs):
-            seller = super().save(commit=False)
-            seller.registered_by = kwargs.get('registered_by')  # Set registered_by from kwargs
-            if commit:
-                seller.save()
-            return seller
+    def save(self, commit=True, registered_by = None, **kwargs):
+        seller = super().save(commit=False)
+        seller.registered_by = registered_by  # Set registered_by from kwargs
+        if commit:
+            seller.save()
+        return seller
