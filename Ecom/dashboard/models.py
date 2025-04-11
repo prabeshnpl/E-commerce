@@ -5,7 +5,8 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
-
+    username = None
+    phone_no = models.IntegerField(unique=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     is_seller = models.BooleanField(default=False)
@@ -39,6 +40,13 @@ class RegisterSeller(models.Model):
         HOME_APPLIANCES = 'home_appliances', 'Home Appliances'
         BOOKS = 'books', 'Books'
         OTHER = 'other', 'Other'
+    
+    class BusinessType(models.TextChoices):
+        INDIVIDUAL = 'individual', 'Individual/Sole Proprietor'
+        PARTNERSHIP = 'partnership', 'Partnership'
+        LLC = 'llc', 'Limited Liability Company (LLC)'
+        CORPORATION = 'corporation', 'Corporation'
+        OTHER = 'other', 'Other'
 
     registered_by = models.ForeignKey(CustomUser, related_name='seller', on_delete=models.SET_NULL, null=True)
     store_name = models.CharField(max_length=64)
@@ -47,13 +55,19 @@ class RegisterSeller(models.Model):
     province = models.CharField(max_length=64)
     postal_code = models.CharField(max_length=64)
     business_description = models.TextField()
+    business_type = models.CharField(
+        max_length=64,
+        choices=BusinessType.choices,
+        default=BusinessType.INDIVIDUAL,
+    )
     primary_product_category = models.CharField(
         max_length=64,
         choices=PrimaryProductCategory.choices,
         default=PrimaryProductCategory.CLOTHING
     )
-    document = models.FileField()
-    verified = models.BooleanField()
+    document = models.FileField(upload_to='seller_documents/')
+    
+    verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.store_name
