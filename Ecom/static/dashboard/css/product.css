@@ -21,6 +21,17 @@
     max-width: 1200px;
     margin: 0 auto;
   }
+  .product-description{
+    padding: 20px;
+    background-color: white;
+    max-width: 1200px;
+    min-height: 30vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5px auto;
+  }
   
   .product-gallery {
     width: 40%;

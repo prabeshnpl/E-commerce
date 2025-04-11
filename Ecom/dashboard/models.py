@@ -8,6 +8,7 @@ class CustomUser(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    is_seller = models.BooleanField(default=False)
 
     def __str__(self):
         return self.email
@@ -31,4 +32,29 @@ class Cart(models.Model):
     def __str__(self):
         return f"{self.user}'s cart"
 
+class RegisterSeller(models.Model):
+    class PrimaryProductCategory(models.TextChoices):
+        CLOTHING = 'clothing', 'Clothing'
+        ELECTRONICS = 'electronics', 'Electronics'
+        HOME_APPLIANCES = 'home_appliances', 'Home Appliances'
+        BOOKS = 'books', 'Books'
+        OTHER = 'other', 'Other'
+
+    registered_by = models.ForeignKey(CustomUser, related_name='seller', on_delete=models.SET_NULL, null=True)
+    store_name = models.CharField(max_length=64)
+    address = models.CharField(max_length=64)
+    city = models.CharField(max_length=64)
+    province = models.CharField(max_length=64)
+    postal_code = models.CharField(max_length=64)
+    business_description = models.TextField()
+    primary_product_category = models.CharField(
+        max_length=64,
+        choices=PrimaryProductCategory.choices,
+        default=PrimaryProductCategory.CLOTHING
+    )
+    document = models.FileField()
+    verified = models.BooleanField()
+
+    def __str__(self):
+        return self.store_name
 
