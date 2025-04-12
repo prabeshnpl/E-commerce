@@ -32,7 +32,7 @@
                 {% if not request.user.is_seller %}
                     <li><a href="{% url 'cart' %}" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
                 {% else %}
-                    <li><a href="{% url 'add_products' %}" class="nav-link my-cart-btn" data-page="shop">My Product</a></li>
+                    <li><a href="{% url 'sellerdashboard' %}" class="nav-link my-cart-btn" data-page="shop">My Products</a></li>
                 {% endif %}
 
                 <li><a href="#" class="nav-link" data-page="about">About</a></li>
@@ -42,7 +42,7 @@
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}
-                <li class="active"><a href="{% url 'seller' %}">Be a Seller</a></li>
+                <li><a href="{% url 'registerseller' %}">Be a Seller</a></li>
             </ul>
         </nav>
     </header>

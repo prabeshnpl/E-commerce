@@ -1,4 +1,4 @@
-from .models import RegisterSeller
+from .models import RegisterSeller, Product
 from django import forms
 
 class RegisterSellerForm(forms.ModelForm):
@@ -35,3 +35,29 @@ class RegisterSellerForm(forms.ModelForm):
         if commit:
             seller.save()
         return seller
+    
+class AddProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+        labels = {
+            'name': 'Product Name *',
+            'brand': 'Brand *',
+            'price': 'Price (Rs.) *',
+            'description': 'Product Description *',
+            'image': 'Product Image *',
+            'stock': 'Stock Quantity *',
+            'category': 'Category *',
+        }
+
+        widgets = {
+            'name': forms.TextInput(attrs={'type': "text", 'id': "product-name"}),
+            'brand': forms.TextInput(attrs={'type': "text", 'id': "product-brand"}),
+            'price': forms.NumberInput(attrs={'type': "number", 'id': "product-price", 'step': "0.01","min":"0"}),
+            'description': forms.Textarea(attrs={'id': "product-description", 'rows': 4, 'style': 'resize: vertical;'}),
+            'image': forms.FileInput(attrs={'type': "file", 'id': "product-image"}),
+            'stock': forms.NumberInput(attrs={'type': "number", 'id': "product-stock",'min':'1'}),
+            'category': forms.Select(attrs={'id': "product-category"}),
+        }
+        

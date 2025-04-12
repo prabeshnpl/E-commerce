@@ -15,13 +15,14 @@
     
     <form id="addProductForm">
         <div class="form-group">
-            <label for="productName">Product Name*</label>
-            <input type="text" id="productName" name="productName" required>
+            {{ form.name.label }}
+            {{ form.name }}
         </div>
         
         <div class="form-group">
-            <label for="productCategory">Category*</label>
-            <select id="productCategory" name="productCategory" required>
+            {{ form.category.label }}
+            {{ form.category }}
+            <!-- <select id="productCategory" name="productCategory" required>
                 <option value="">Select a category</option>
                 <option value="clothing">Clothing</option>
                 <option value="electronics">Electronics</option>
@@ -30,22 +31,22 @@
                 <option value="watches">Watches</option>
                 <option value="bags">Bags</option>
                 <option value="other">Other</option>
-            </select>
+            </select> -->
         </div>
         
         <div class="form-group">
-            <label for="productPrice">Price ($)*</label>
-            <input type="number" id="productPrice" name="productPrice" min="0" step="0.01" required>
+            {{ form.price.label }}
+            {{ form.price }}
         </div>
         
         <div class="form-group">
-            <label for="productStock">Stock Quantity*</label>
-            <input type="number" id="productStock" name="productStock" min="1" required>
+            {{ form.stock.label }}
+            {{ form.stock }}
         </div>
         
         <div class="form-group">
-            <label for="productDescription">Product Description*</label>
-            <textarea id="productDescription" name="productDescription" required></textarea>
+            {{ form.description.label }}
+            {{ form.description }}
         </div>
         
         <div class="form-group">

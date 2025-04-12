@@ -5,6 +5,7 @@
         a) Is loaded using views by default
         b) Login/Registration
         c) Uses "load_products" view to asynchronously fetch products 
+        d) Product page for products reviews and specifications
 
 
 3) Basic backend design

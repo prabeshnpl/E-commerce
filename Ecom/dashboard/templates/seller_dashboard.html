@@ -1,0 +1,219 @@
+{% extends 'base.html' %}  
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'dashboard/css/seller_dash.css' %}">
+{% endblock %}
+
+{% block maincontent %}
+    <div class="container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Seller Dashboard</h1>
+            <button class="btn btn-primary"><a href="{% url 'add_products' %}">+ Add New Product</a></button>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-title">Total Sales</div>
+                <div class="stat-value">$None</div>
+                <div class="stat-change stat-up">+ null % from last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Active Products</div>
+                <div class="stat-value">{{ count }}</div>
+                <div class="stat-change stat-up">+1 new this month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Orders</div>
+                <div class="stat-value">142</div>
+                <div class="stat-change stat-up">+8% from last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Avg. Product Rating</div>
+                <div class="stat-value">4.7/5</div>
+                <div class="stat-change">Based on 89 reviews</div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active">My Products</div>
+            <div class="tab">Orders</div>
+            <div class="tab">Reviews</div>
+            <div class="tab">Analytics</div>
+        </div>
+        
+        <div class="filter-bar">
+            <div class="filter-left">
+                <div class="filter-group">
+                    <span class="filter-label">Category:</span>
+                    <select class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="footwear">Footwear</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">Status:</span>
+                    <select class="filter-select">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">Sort by:</span>
+                    <select class="filter-select">
+                        <option value="recent">Most Recent</option>
+                        <option value="best-selling">Best Selling</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="price-low">Price: Low to High</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <input type="text" placeholder="Search products..." class="search-input">
+            </div>
+        </div>
+        
+        <div class="products-grid">
+            <!-- Products -->
+            {% if products %}
+                {% for product in products %}
+                <div class="product-card">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                    <div class="product-details">
+                        <h3 class="product-name">{{ product.name }}</h3>
+                        <div class="product-price">Rs.{{ product.price }}</div>
+                        <div class="product-stock">In Stock: {{ product.stock }} units</div>
+                        <div class="product-stats">
+                            <span>21 sales</span>
+                            <span>4.4/5 ★</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-sm btn-outline view-details" data-product="product6">View Details</button>
+                            <button class="btn btn-sm btn-outline">Edit</button>
+                        </div>
+                    </div>
+                </div>                  
+                
+                <!-- <div class="product-card" data-id="${product.id}">
+                    <div class="product-image">
+                        <img src="{{ product.image.url }}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">{{product.name}}</h3>
+                        <p class="product-price">${{product.price}}</p>
+                    </div>
+                </div> -->
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="pagination">
+            <div class="page-item active">1</div>
+            <div class="page-item">2</div>
+            <div class="page-item">3</div>
+            <div class="page-item">4</div>
+            <div class="page-item">→</div>
+        </div>
+    </div>
+    
+    <!-- Product Detail Modal -->
+    <div class="product-detail-modal" id="productDetailModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Blue T-Shirt - Product Performance</h2>
+            
+            <div class="product-detail-body">
+                <div>
+                    <img src="/api/placeholder/350/250" alt="Blue T-Shirt" style="width: 100%; border-radius: 8px;">
+                    <div class="product-detail-stats">
+                        <div class="detail-stat">
+                            <div class="detail-stat-title">Total Sales</div>
+                            <div class="detail-stat-value">89</div>
+                        </div>
+                        <div class="detail-stat">
+                            <div class="detail-stat-title">Revenue</div>
+                            <div class="detail-stat-value">$46,280</div>
+                        </div>
+                        <div class="detail-stat">
+                            <div class="detail-stat-title">Average Rating</div>
+                            <div class="detail-stat-value">4.8/5 ★</div>
+                        </div>
+                        <div class="detail-stat">
+                            <div class="detail-stat-title">Stock Level</div>
+                            <div class="detail-stat-value">24 units</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>Product Details</h3>
+                    <p style="margin: 15px 0;">Premium quality cotton t-shirt in royal blue color. Available in multiple sizes. A bestseller in our clothing category with consistently high ratings and popular among 18-35 age demographic.</p>
+                    
+                    <h3>Sales Performance</h3>
+                    <div class="sales-chart">
+                        [Sales Chart: Monthly sales trend showing 15% growth]
+                    </div>
+                    
+                    <h3 style="margin-top: 20px;">Customer Demographics</h3>
+                    <div class="sales-chart">
+                        [Demographics Chart: 65% Male, 35% Female, Age 18-35]
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h3>Top Customer Reviews</h3>
+                        <div style="margin-top: 10px; padding: 10px; background-color: #f5f5f5; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <div>5.0 ★★★★★</div>
+                                <div>John D. - 2 weeks ago</div>
+                            </div>
+                            <p style="margin-top: 5px;">Great quality and perfect fit. The blue color is exactly as shown in the pictures.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; display: flex; justify-content: flex-end; gap: 15px;">
+                <button class="btn btn-outline">Edit Product</button>
+                <button class="btn btn-primary">Manage Inventory</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Show product detail modal when "View Details" is clicked
+        const viewDetailsButtons = document.querySelectorAll('.view-details');
+        const modal = document.getElementById('productDetailModal');
+        const closeModal = document.querySelector('.close-modal');
+        
+        viewDetailsButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                modal.style.display = 'flex';
+            });
+        });
+        
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        // Close modal when clicking outside the content
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        
+        // Tab switching (simplified for demo)
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+
+{% endblock %}

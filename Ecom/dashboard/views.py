@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
 import json
-from .forms import RegisterSellerForm
+from .forms import RegisterSellerForm, AddProductForm
 # Create your views here.
 
 def Login(request):
@@ -61,11 +61,9 @@ def products(request,pk):
     product = Product.objects.get(id=pk)    
     return render(request,'product.html',{'product':product})
 
-def add_products(request):
-    return render(request,'add_products.html')
 
 @login_required(redirect_field_name='login')
-def seller(request):
+def registerseller(request):
     filled = False
     if RegisterSeller.objects.filter(registered_by = request.user).exists():
         filled = True
@@ -85,17 +83,51 @@ def seller(request):
     else:
         form = RegisterSellerForm()
             
-    return render(request,'seller.html',{'form' : form ,'filled':filled})
+    return render(request,'registerseller.html',{'form' : form ,'filled':filled})
+
+
 
 @login_required(redirect_field_name='login')
 def cart(request):
     try:
+        if request.user.is_seller:
+            return redirect('sellerdashboard')
         cart_obj = get_object_or_404(Cart,user=request.user)
         products = cart_obj.products.all()
     except Exception as e:
         messages.error(request,"User's cart not found !!")
         
     return render(request, 'cart.html',{'products':products})
+
+@login_required(redirect_field_name='login')
+def sellerdashboard(request):
+    if not request.user.is_seller:
+        return redirect('cart')
+    products = Product.objects.filter(seller=request.user)
+    count = products.count()
+    return render(request,'seller_dashboard.html',{'products':products,'count':count})
+
+@login_required(redirect_field_name='login')
+def add_products(request):
+    if not request.user.is_seller:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = AddProductForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Product added successfully! ')
+            return redirect('seller_dashboard')
+        else:
+            messages.error(request,form.errors)
+
+    else:
+        form = AddProductForm()
+    return render(request,'add_products.html',{'form':form})
+
+
+
+
 
 def load_products(request):
     page_no = request.GET.get('page',1) #if no pageno, default=1
@@ -104,6 +136,10 @@ def load_products(request):
 
     products = list(page.object_list.values('id','name','image','price','description','stock'))
     return JsonResponse({'products':products,'has_next':page.has_next()})
+
+
+
+
 
 @login_required(redirect_field_name='login')
 def add_to_cart(request):

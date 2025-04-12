@@ -41,16 +41,30 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
         return self.email
 
 class Product(models.Model):
+    class ProductType(models.TextChoices):
+        CLOTHING = 'clothing', 'Clothing'
+        ELECTRONICS = 'electronics', 'Electronics'
+        ACCESSORIES = 'accessories', 'Accessories'
+        FOOTWEAR = 'footwear', 'Footwear'
+        WATCHES = 'watches', 'Watches'
+        BAGS = 'bags', 'Bags'
+        OTHER = 'other', 'Other'
+
+    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='products')
     name = models.CharField(max_length=64)
     brand = models.CharField(max_length=64,default='Django')
     price = models.FloatField()
     description = models.TextField()
-    image = models.ImageField(upload_to='product_images/')
-
     stock = models.IntegerField()
+    category = models.CharField(max_length=64,choices=ProductType.choices,default=ProductType.OTHER)
 
     def __str__(self):
         return self.name
+
+class ProductImages(models.Model):
+    image = models.ImageField(upload_to='product_images/',null=True,blank=True)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='images')
+
 
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='user_cart')
