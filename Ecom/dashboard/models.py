@@ -54,7 +54,9 @@ class Product(models.Model):
     name = models.CharField(max_length=64)
     brand = models.CharField(max_length=64,default='Django')
     price = models.FloatField()
+    main_image = models.ImageField(upload_to='product_images/',null=True,blank=True)
     description = models.TextField()
+    key_features = models.TextField(blank=True,null=True)
     stock = models.IntegerField()
     category = models.CharField(max_length=64,choices=ProductType.choices,default=ProductType.OTHER)
 
@@ -63,7 +65,10 @@ class Product(models.Model):
 
 class ProductImages(models.Model):
     image = models.ImageField(upload_to='product_images/',null=True,blank=True)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='images')
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='secondary_images')
+
+    def __str__(self):
+        return f'{self.product.name}'
 
 
 class Cart(models.Model):

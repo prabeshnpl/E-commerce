@@ -94,8 +94,10 @@ def cart(request):
             return redirect('sellerdashboard')
         cart_obj = get_object_or_404(Cart,user=request.user)
         products = cart_obj.products.all()
+       
     except Exception as e:
-        messages.error(request,"User's cart not found !!")
+        # messages.error(request,"User's cart not found !!")
+        messages.error(request,str(e))
         
     return render(request, 'cart.html',{'products':products})
 
@@ -134,7 +136,7 @@ def load_products(request):
     paginator = Paginator(Product.objects.all(),20)
     page = paginator.get_page(page_no)
 
-    products = list(page.object_list.values('id','name','image','price','description','stock'))
+    products = list(page.object_list.values('id','name','main_image','price','description','stock'))
     return JsonResponse({'products':products,'has_next':page.has_next()})
 
 

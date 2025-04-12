@@ -22,16 +22,6 @@
         <div class="form-group">
             {{ form.category.label }}
             {{ form.category }}
-            <!-- <select id="productCategory" name="productCategory" required>
-                <option value="">Select a category</option>
-                <option value="clothing">Clothing</option>
-                <option value="electronics">Electronics</option>
-                <option value="accessories">Accessories</option>
-                <option value="footwear">Footwear</option>
-                <option value="watches">Watches</option>
-                <option value="bags">Bags</option>
-                <option value="other">Other</option>
-            </select> -->
         </div>
         
         <div class="form-group">
@@ -50,39 +40,40 @@
         </div>
         
         <div class="form-group">
-            <label>Product Images*</label>
+            {{ form.main_image.label }}
             <div class="image-upload">
-                <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
-                <p style="color: #666; font-size: 14px;">Upload up to 5 images. First image will be used as the main product image.</p>
+
+                <p style="color: #666; font-size: 14px;">Upload up to 3 images. First image will be used as the main product image.</p>
                 <div class="image-preview">
-                    <div class="preview-box">Preview 1</div>
-                    <div class="preview-box">Preview 2</div>
-                    <div class="preview-box">Preview 3</div>
+                    <div class="image-preview-img">
+                        <div class="main-preview-box">Preview 1</div>
+                        <br>
+                        {{ form.main_image }}
+                    </div>
+
+                    <div class="image-preview-img">
+                        <div class="preview-box1">Preview 2</div>
+                        <br>
+                        {{ form.image1 }}
+                    </div>
+
+                    <div class="image-preview-img">
+                        <div class="preview-box2">Preview 3</div>
+                        <br>
+                        {{ form.image2 }}
+                    </div>
+
                 </div>
             </div>
         </div>
         
         <div class="form-group">
-            <label for="productFeatures">Key Features</label>
-            <textarea id="productFeatures" name="productFeatures" placeholder="Enter each feature on a new line"></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label>Product Status</label>
-            <div style="display: flex; gap: 20px; margin-top: 10px;">
-                <label style="display: flex; align-items: center; gap: 5px;">
-                    <input type="radio" name="productStatus" value="active" checked>
-                    Active
-                </label>
-                <label style="display: flex; align-items: center; gap: 5px;">
-                    <input type="radio" name="productStatus" value="draft">
-                    Save as Draft
-                </label>
-            </div>
+            {{ form.key_features.label }}
+            {{ form.key_features }}
         </div>
         
         <div class="form-actions">
-            <button type="button" class="btn btn-secondary">Cancel</button>
+            <a href="{% url 'sellerdashboard' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
             <button type="submit" class="btn btn-primary">Add Product</button>
         </div>
     </form>
@@ -90,22 +81,61 @@
 
 <script>
     // Simple preview functionality for demonstration
-    document.getElementById('productImages').addEventListener('change', function(e) {
-        const previewBoxes = document.querySelectorAll('.preview-box');
-        const files = e.target.files;
+    document.getElementById('mainProductImage').addEventListener('change', function(e) {
+        const previewBox = document.querySelector('.main-preview-box');
+        const file = e.target.files[0]; // Fetch only the first image
         
-        for (let i = 0; i < Math.min(files.length, previewBoxes.length); i++) {
-            const file = files[i];
+        if (file) {
             const reader = new FileReader();
             
             reader.onload = function(e) {
-                previewBoxes[i].innerHTML = '';
+                previewBox.innerHTML = '';
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 img.style.maxWidth = '100%';
                 img.style.maxHeight = '100%';
-                previewBoxes[i].appendChild(img);
-            }
+                previewBox.appendChild(img);
+            };
+            
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    document.getElementById('productImage1').addEventListener('change', function(e) {
+        const previewBox = document.querySelector('.preview-box1');
+        const file = e.target.files[0]; // Fetch only the first image
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewBox.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '100%';
+                previewBox.appendChild(img);
+            };
+            
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    document.getElementById('productImage2').addEventListener('change', function(e) {
+        const previewBox = document.querySelector('.preview-box2');
+        const file = e.target.files[0]; // Fetch only the first image
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewBox.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '100%';
+                previewBox.appendChild(img);
+            };
             
             reader.readAsDataURL(file);
         }

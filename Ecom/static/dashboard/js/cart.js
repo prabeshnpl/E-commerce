@@ -50,17 +50,17 @@ function getCSRFToken() {
 document.querySelectorAll('.decrease').forEach(button => {
     button.addEventListener('click', function() {
         const id = parseInt(this.getAttribute('data-id'));
-        const price = parseInt(this.getAttribute('data-price'));
+        const price = parseFloat(this.getAttribute('data-price'));
         let productCount = document.getElementById(`product-count-${id}`);
         productCount.value = parseInt(productCount.value) - 1;
 
-        if(productCount.value <= 0 )
-        {
+        if (productCount.value <= 0) {
             productCount.value = 1;
         }
+
         let totalProductPrice = document.getElementById(`product-price-${id}`);
-        totalProductPrice.innerHTML =`$ ${ (price * parseFloat(productCount.value)).toFixed(2) }`;
-        updateSubtotal();
+        totalProductPrice.innerHTML = `$${(price * parseFloat(productCount.value)).toFixed(2)}`;
+        updateGrandTotal(); // Update the grand total after modifying the product count
     });
 });
 
@@ -71,34 +71,21 @@ document.querySelectorAll('.increase').forEach(button => {
         let productCount = document.getElementById(`product-count-${id}`);
         productCount.value = parseInt(productCount.value) + 1;
 
-        if(productCount.value < 1 )
-        {
-            productCount.value = 1;
-        }
         let totalProductPrice = document.getElementById(`product-price-${id}`);
-        totalProductPrice.innerHTML =`$ ${ (price * parseFloat(productCount.value)).toFixed(2) }`;
-        updateSubtotal();
+        totalProductPrice.innerHTML = `$${(price * parseFloat(productCount.value)).toFixed(2)}`;
+        updateGrandTotal(); // Update the grand total after modifying the product count
     });
 });
 
-window.addEventListener('DOMContentLoaded',() => {
-    updateSubtotal();
-})
-
-function updateSubtotal() {
-    let subtotal = 0;
-    document.querySelectorAll('.quantity-input').forEach(input => {
-        const id = input.getAttribute('id').split('-')[2]; // Extract product ID
-        const price = parseFloat(document.querySelector(`.quantity-btn[data-id="${id}"]`).getAttribute('data-price'));
-        const quantity = parseInt(input.value);
-        subtotal += price * quantity;
-        document.getElementById(`product-price-${id}`).innerText = `$${subtotal.toFixed(2)}`;
-    });
-
+function updateGrandTotal() {
     let grandTotal = 0;
-    document.querySelectorAll('.all-prices').forEach( price => {
+    document.querySelectorAll('.all-prices').forEach(price => {
         let aprice = price.innerHTML.split('$')[1];
-        grandTotal = (parseFloat(grandTotal) + parseFloat(aprice)).toFixed(2);
-    })
-    document.getElementById('cartSubtotal').innerText = `$${grandTotal}`;
+        grandTotal += parseFloat(aprice);
+    });
+    document.getElementById('cartSubtotal').innerText = `$${grandTotal.toFixed(2)}`;
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+    updateGrandTotal();
+});

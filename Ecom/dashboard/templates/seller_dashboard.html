@@ -81,7 +81,7 @@
             {% if products %}
                 {% for product in products %}
                 <div class="product-card">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="product-image">
                     <div class="product-details">
                         <h3 class="product-name">{{ product.name }}</h3>
                         <div class="product-price">Rs.{{ product.price }}</div>

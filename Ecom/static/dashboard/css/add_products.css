@@ -24,6 +24,10 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
+a{
+    text-decoration: none;
+}
+
 .search-container {
     display: flex;
     align-items: center;
@@ -109,7 +113,7 @@ textarea {
     margin-top: 15px;
 }
 
-.preview-box {
+.main-preview-box, .preview-box1, .preview-box2{
     width: 100px;
     height: 100px;
     border: 2px dashed #ddd;

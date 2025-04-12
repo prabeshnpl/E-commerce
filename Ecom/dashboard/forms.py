@@ -37,6 +37,8 @@ class RegisterSellerForm(forms.ModelForm):
         return seller
     
 class AddProductForm(forms.ModelForm):
+    image1 = forms.ImageField(required=False, widget=forms.FileInput(attrs={'type': "file", 'id': "productImage1", 'accept': "image/*"}))
+    image2 = forms.ImageField(required=False, widget=forms.FileInput(attrs={'type': "file", 'id': "productImage2", 'accept': "image/*"}))
     class Meta:
         model = Product
         fields = '__all__'
@@ -46,9 +48,10 @@ class AddProductForm(forms.ModelForm):
             'brand': 'Brand *',
             'price': 'Price (Rs.) *',
             'description': 'Product Description *',
-            'image': 'Product Image *',
+            'main_image': 'Product Image *',
             'stock': 'Stock Quantity *',
             'category': 'Category *',
+            'key_features':'Key Features',
         }
 
         widgets = {
@@ -56,7 +59,8 @@ class AddProductForm(forms.ModelForm):
             'brand': forms.TextInput(attrs={'type': "text", 'id': "product-brand"}),
             'price': forms.NumberInput(attrs={'type': "number", 'id': "product-price", 'step': "0.01","min":"0"}),
             'description': forms.Textarea(attrs={'id': "product-description", 'rows': 4, 'style': 'resize: vertical;'}),
-            'image': forms.FileInput(attrs={'type': "file", 'id': "product-image"}),
+            'key_features': forms.Textarea(attrs={'id': "product-features", 'placeholder':'Enter each feature on a new line', 'rows': 4, 'style': 'resize: vertical;'}),
+            'main_image': forms.FileInput(attrs={'type': "file", 'id': "mainProductImage",'accept':"image/*",'multiple':''}),
             'stock': forms.NumberInput(attrs={'type': "number", 'id': "product-stock",'min':'1'}),
             'category': forms.Select(attrs={'id': "product-category"}),
         }

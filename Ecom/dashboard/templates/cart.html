@@ -28,7 +28,7 @@
                                 <td>
                                     <div class="cart-product">
                                         <div class="cart-product-image">
-                                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                            <img src="{{ product.main_image.url }}" alt="{{ product.name }}">
                                         </div>
                                         <div>
                                             <h3>{{ product.name }}</h3>
@@ -71,4 +71,11 @@
 </main>
  
 <script src="{% static 'dashboard/js/cart.js' %}"></script>
+<script>
+    document.querySelectorAll('.message-error').forEach((message)=>{
+        setTimeout(()=>{
+            message.style.display = 'none';
+        },2000)
+    })
+</script>
 {% endblock %}
