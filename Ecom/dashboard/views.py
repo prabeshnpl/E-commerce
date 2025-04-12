@@ -116,10 +116,12 @@ def add_products(request):
     
     if request.method == 'POST':
         form = AddProductForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
+        print(request.FILES)
+        if form.is_valid():         
+            print(form.cleaned_data)   
+            form.save(seller = request.user)
             messages.success(request,'Product added successfully! ')
-            return redirect('seller_dashboard')
+            return redirect('sellerdashboard')
         else:
             messages.error(request,form.errors)
 

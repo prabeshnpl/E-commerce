@@ -13,12 +13,21 @@
     
     <h1>Add New Product</h1>
     
-    <form id="addProductForm">
+    <form id="addProductForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <input type="hidden" name="seller" value="{{ request.user }}">
+        
         <div class="form-group">
             {{ form.name.label }}
             {{ form.name }}
         </div>
         
+        <div class="form-group">
+            {{ form.brand.label }}
+            {{ form.brand }}
+        </div>
+
         <div class="form-group">
             {{ form.category.label }}
             {{ form.category }}
@@ -140,41 +149,6 @@
             reader.readAsDataURL(file);
         }
     });
-    
-    // Form submission handler
-    document.getElementById('addProductForm').addEventListener('submit', function(e) {
-        e.preventDefault();
         
-        // Basic validation
-        const requiredFields = document.querySelectorAll('[required]');
-        let valid = true;
-        
-        requiredFields.forEach(field => {
-            if (!field.value) {
-                valid = false;
-                field.style.borderColor = 'red';
-            } else {
-                field.style.borderColor = '#ddd';
-            }
-        });
-        
-        if (valid) {
-            // Show success message
-            document.getElementById('successMessage').style.display = 'block';
-            
-            // In a real implementation, you would submit the form data to the server here
-            // Reset form after short delay
-            setTimeout(() => {
-                document.getElementById('addProductForm').reset();
-                document.getElementById('successMessage').style.display = 'none';
-                
-                // Reset image previews
-                const previewBoxes = document.querySelectorAll('.preview-box');
-                previewBoxes.forEach(box => {
-                    box.innerHTML = box.getAttribute('data-default') || 'Preview';
-                });
-            }, 3000);
-        }
-    });
 </script>
 {% endblock %}

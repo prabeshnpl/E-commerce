@@ -54,9 +54,9 @@ class Product(models.Model):
     name = models.CharField(max_length=64)
     brand = models.CharField(max_length=64,default='Django')
     price = models.FloatField()
-    main_image = models.ImageField(upload_to='product_images/',null=True,blank=True)
+    main_image = models.ImageField(upload_to='product_images/')
     description = models.TextField()
-    key_features = models.TextField(blank=True,null=True)
+    key_features = models.TextField()
     stock = models.IntegerField()
     category = models.CharField(max_length=64,choices=ProductType.choices,default=ProductType.OTHER)
 

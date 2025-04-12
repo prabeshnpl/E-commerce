@@ -1,4 +1,4 @@
-from .models import RegisterSeller, Product
+from .models import RegisterSeller, Product, ProductImages
 from django import forms
 
 class RegisterSellerForm(forms.ModelForm):
@@ -41,7 +41,7 @@ class AddProductForm(forms.ModelForm):
     image2 = forms.ImageField(required=False, widget=forms.FileInput(attrs={'type': "file", 'id': "productImage2", 'accept': "image/*"}))
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ['seller']
 
         labels = {
             'name': 'Product Name *',
@@ -60,8 +60,25 @@ class AddProductForm(forms.ModelForm):
             'price': forms.NumberInput(attrs={'type': "number", 'id': "product-price", 'step': "0.01","min":"0"}),
             'description': forms.Textarea(attrs={'id': "product-description", 'rows': 4, 'style': 'resize: vertical;'}),
             'key_features': forms.Textarea(attrs={'id': "product-features", 'placeholder':'Enter each feature on a new line', 'rows': 4, 'style': 'resize: vertical;'}),
-            'main_image': forms.FileInput(attrs={'type': "file", 'id': "mainProductImage",'accept':"image/*",'multiple':''}),
+            'main_image': forms.FileInput(attrs={'type': "file", 'id': "mainProductImage",'accept':"image/*"}),
             'stock': forms.NumberInput(attrs={'type': "number", 'id': "product-stock",'min':'1'}),
             'category': forms.Select(attrs={'id': "product-category"}),
         }
+
+    def save(self, commit = True, seller=None, **kwargs):
+        product = super().save(commit=False)
+        product.seller = seller
+        if commit:
+            product.save()
+            image1 = self.cleaned_data.get('image1')
+            image2 = self.cleaned_data.get('image2')
+
+            if image1:
+                ProductImages.objects.create(product=product, image=image1)
+            if image2:
+                ProductImages.objects.create(product=product, image=image2)
+        
+        return product
+
+
         
