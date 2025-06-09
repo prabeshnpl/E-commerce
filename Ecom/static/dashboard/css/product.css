@@ -76,13 +76,6 @@
     cursor: pointer;
   }
   
-  .thumbnail-prev {
-    left: 0;
-  }
-  
-  .thumbnail-next {
-    right: 0;
-  }
   
   .product-details {
     width: 60%;

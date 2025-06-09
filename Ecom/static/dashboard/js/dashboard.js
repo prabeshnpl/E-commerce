@@ -2,7 +2,7 @@
 // Initialize the page with some items in the cart for demo
 window.addEventListener('DOMContentLoaded', function() {
 
-    // use body to add event listner since add-to-cart-btn is loaded dynamically later
+    // use body to add event listner for adding product in cart since add-to-cart-btn is loaded dynamically later
     document.body.addEventListener('click', (event) => {
 
         const productCard = event.target.closest('.product-card');
@@ -57,24 +57,24 @@ window.addEventListener('DOMContentLoaded', function() {
     }
         //Mobile functionality
 
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mainNav = document.getElementById('mainNav');
-        
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', function() {
-                mainNav.classList.toggle('active');
-            });
-        }
-        
-        // Close mobile menu when clicking on a nav link
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                if (window.innerWidth <= 768) {
-                    mainNav.classList.remove('active');
-                }
-            });
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mainNav = document.getElementById('mainNav');
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mainNav.classList.toggle('active');
         });
+    }
+    
+    // Close mobile menu when clicking on a nav link
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                mainNav.classList.remove('active');
+            }
+        });
+    });
 
 
     let currentPage = 1;
@@ -93,18 +93,18 @@ window.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             data.products.forEach(product =>{
                 const productCard = `
-                <div class="product-card" data-id="${product.id}">
-                    <div class="product-image">
-                        <img src="${baseUrl}/media/${product.main_image}" alt="${product.name}">
+                    <div class="product-card" data-id="${product.id}">
+                        <div class="product-image">
+                            <img src="${baseUrl}/media/${product.main_image}" alt="${product.name}">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${product.name}</h3>
+                            <p class="product-price">Brand : ${product.brand}</p>
+                            <p class="product-price">$${product.price}</p>
+                            <button class="add-to-cart-btn" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}" >Add to Cart</button>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-title">${product.name}</h3>
-                        <p class="product-price">Brand : ${product.brand}</p>
-                        <p class="product-price">$${product.price}</p>
-                        <button class="add-to-cart-btn" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}" >Add to Cart</button>
-                    </div>
-                </div>
-                `;
+                    `;
                 productContainer.insertAdjacentHTML('beforeend',productCard);
             })
             spinner.style.display = 'none';

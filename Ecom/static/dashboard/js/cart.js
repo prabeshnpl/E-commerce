@@ -88,4 +88,12 @@ function updateGrandTotal() {
 
 window.addEventListener('DOMContentLoaded', () => {
     updateGrandTotal();
+    document.getElementById('checkout-btn').addEventListener('click',()=>{
+        document.getElementById('overlay-payment').style.display = 'flex';
+        document.getElementById('cartPage').style.color = 'flex';
+
+    });
+    document.getElementById('close-btn').addEventListener('click',()=>{
+        document.getElementById('overlay-payment').style.display = 'none';
+    });
 });

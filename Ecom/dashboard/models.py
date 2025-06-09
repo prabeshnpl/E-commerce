@@ -27,7 +27,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser,PermissionsMixin):
     first_name = models.CharField(max_length=64)
     email = models.EmailField(unique=True)
-    phone = models.IntegerField(unique=True)
+    phone_no = models.IntegerField(unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_seller = models.BooleanField(default=False)
@@ -52,7 +52,7 @@ class Product(models.Model):
 
     seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='products')
     name = models.CharField(max_length=64)
-    brand = models.CharField(max_length=64,default='Django')
+    brand = models.CharField(max_length=64)
     price = models.FloatField()
     main_image = models.ImageField(upload_to='product_images/')
     description = models.TextField()

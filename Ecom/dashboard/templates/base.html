@@ -12,6 +12,7 @@
 
 <body>
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <input type="hidden" id="is_seller" value="{{ request.user.is_seller }}">
     {% if messages %}
         {% for message in messages %}
             <div class="message-{{ message.tags }}">
@@ -29,9 +30,8 @@
         <nav id="mainNav">
             <ul>
                 <li><a href="{% url 'home' %}" class="nav-link" data-page="home">Home</a></li>
-                {% if not request.user.is_seller %}
-                    <li><a href="{% url 'cart' %}" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
-                {% else %}
+                <li><a href="{% url 'cart' %}" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
+                {% if request.user.is_seller %}
                     <li><a href="{% url 'sellerdashboard' %}" class="nav-link my-cart-btn" data-page="shop">My Products</a></li>
                 {% endif %}
 
@@ -42,7 +42,9 @@
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}
-                <li><a href="{% url 'registerseller' %}">Be a Seller</a></li>
+                {% if not request.user.is_seller %}
+                    <li><a href="{% url 'registerseller' %}">Be a Seller</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

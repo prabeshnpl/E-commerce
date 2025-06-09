@@ -26,6 +26,19 @@ img {
     height: auto;
 }
 
+.flex-col{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .logo {
     font-size: 24px;
     font-weight: bold;
@@ -317,6 +330,16 @@ nav ul li a {
 
 .checkout-btn:hover {
     background-color: #0d3a6a;
+}
+
+.overlay-payment{
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 35%;
+    height: 50vh;
+    width: 70vh;
+    background: rgb(236, 202, 202);
 }
 
 .homepage {

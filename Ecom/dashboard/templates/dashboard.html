@@ -10,7 +10,13 @@
                 <div class="hero-text">
                     <h1>Shop the Latest Trends</h1>
                     <p>Discover our collection of the most recent arrivals and best-selling products.</p>
-                    <a class="shop-now-btn" href="{% url 'cart' %}" style="text-decoration: none;">My Cart</a>
+                    <a class="shop-now-btn" href="{% url 'cart' %}" style="text-decoration: none;">
+                        {% if request.user.is_seller %}
+                            <span class="btn-text">My Products</span>
+                        {% else %}
+                            <span class="btn-text">My cart</span>
+                        {% endif %}
+                    </a>
                 </div>
                 <div class="hero-images">
                     <img src="{% static 'img/handbag.jpg' %}" alt="Yellow handbag">

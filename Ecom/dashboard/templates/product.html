@@ -8,15 +8,12 @@
 {% block maincontent %}
 <div class="product-container">
   <div class="product-gallery">
-    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="main-image">
+    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="main-image">
     
     <div class="thumbnail-container">
-      <div class="thumbnail-nav thumbnail-prev">❮</div>
-      <img src="{{ product.image.url }}" alt="Thumbnail 1" class="thumbnail active">
-      <img src="{{ product.image.url }}" alt="Thumbnail 2" class="thumbnail">
-      <img src="{{ product.image.url }}" alt="Thumbnail 3" class="thumbnail">
-      <img src="{{ product.image.url }}" alt="Thumbnail 4" class="thumbnail">
-      <div class="thumbnail-nav thumbnail-next">❯</div>
+      {% for image in images %}
+        <img src="{{ image.image.url }}" alt="Thumbnail {{ image.id }}" class="thumbnail active">
+      {% endfor %}
     </div>
   </div>
   
@@ -29,7 +26,7 @@
     </div>
     
     <div class="brand-info">
-      Brand: <a href="#" class="brand-link">Django</a> | <a href="#" class="brand-link">More Products from this brand</a>
+      Brand: <a href="#" class="brand-link">{{ product.brand }}</a> | <a href="#" class="brand-link">More Products from this brand</a>
     </div>
     
     <div class="price-container">
@@ -61,8 +58,8 @@
       <div class="address-container">
         <span>📍</span>
         <div>
-          <div>Bagmati, Kathmandu Metro</div>
-          <div>22 - Newroad Area, Newroad</div>
+          <div>Bhadrapur, Jhapa</div>
+          <div>1 - Bihibare Area, Sombare</div>
         </div>
         <a href="#" style="margin-left: auto; color: #0066c0;">CHANGE</a>
       </div>

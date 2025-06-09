@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.core.paginator import Paginator
-from .models import CustomUser, Cart, Product,RegisterSeller
+from .models import CustomUser, Cart, Product,RegisterSeller, ProductImages
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate
@@ -58,8 +58,10 @@ def home(request):
     return render(request, 'dashboard.html')
 
 def products(request,pk):
-    product = Product.objects.get(id=pk)    
-    return render(request,'product.html',{'product':product})
+    product = Product.objects.get(id=pk)  
+    images = product.secondary_images.all()
+    
+    return render(request,'product.html',{'product':product,'images':images})
 
 
 @login_required(redirect_field_name='login')
@@ -90,8 +92,6 @@ def registerseller(request):
 @login_required(redirect_field_name='login')
 def cart(request):
     try:
-        if request.user.is_seller:
-            return redirect('sellerdashboard')
         cart_obj = get_object_or_404(Cart,user=request.user)
         products = cart_obj.products.all()
        
@@ -116,9 +116,7 @@ def add_products(request):
     
     if request.method == 'POST':
         form = AddProductForm(request.POST,request.FILES)
-        print(request.FILES)
         if form.is_valid():         
-            print(form.cleaned_data)   
             form.save(seller = request.user)
             messages.success(request,'Product added successfully! ')
             return redirect('sellerdashboard')
@@ -138,7 +136,7 @@ def load_products(request):
     paginator = Paginator(Product.objects.all(),20)
     page = paginator.get_page(page_no)
 
-    products = list(page.object_list.values('id','name','main_image','price','description','stock'))
+    products = list(page.object_list.values('id','name','main_image','price','stock','brand'))
     return JsonResponse({'products':products,'has_next':page.has_next()})
 
 
