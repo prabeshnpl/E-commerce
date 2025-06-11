@@ -28,23 +28,25 @@
             <button>🔍</button>
         </div>
         <nav id="mainNav">
+            
             <ul>
-                <li><a href="{% url 'home' %}" class="nav-link" data-page="home">Home</a></li>
-                <li><a href="{% url 'cart' %}" class="nav-link my-cart-btn" data-page="shop">My Cart</a></li>
+                <li><a href="{% url 'home' %}" class="nav-link {% if page == 'home' %}active{% endif %}" data-page="home">Home</a></li>
+                <li><a href="{% url 'cart' %}" class="nav-link my-cart-btn {% if page == 'cart' %}active{% endif %}" data-page="shop">My Cart</a></li>
                 {% if request.user.is_seller %}
-                    <li><a href="{% url 'sellerdashboard' %}" class="nav-link my-cart-btn" data-page="shop">My Products</a></li>
+                    <li><a href="{% url 'sellerdashboard' %}" class="nav-link my-cart-btn {% if page == 'sellerdashboard' %}active{% endif %}" data-page="shop">My Products</a></li>
                 {% endif %}
-
-                <li><a href="#" class="nav-link" data-page="about">About</a></li>
-                <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+                <li><a href="#" class="nav-link {% if page == 'about' %}active{% endif %}" data-page="about">About</a></li>
+                <li><a href="#" class="nav-link {% if page == 'contact' %}active{% endif %}" data-page="contact">Contact</a></li>
                 {% if request.user.is_authenticated %}
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'login' %}" class="nav-link {% if page == 'login' %}active{% endif %}">Login</a></li>
                 {% endif %}
-                {% if not request.user.is_seller %}
-                    <li><a href="{% url 'registerseller' %}">Be a Seller</a></li>
-                {% endif %}
+                        {% if not request.user.is_seller %}
+                            <li><a href="{% url 'registerseller' %}" class="nav-link {% if page == 'registerseller' %}active{% endif %}">Be a Seller</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
             </ul>
         </nav>
     </header>

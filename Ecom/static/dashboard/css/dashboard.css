@@ -75,6 +75,16 @@ nav ul li a {
     color: #333;
     font-weight: 500;
 }
+.nav-link.active {
+    background-color: #e67e22;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
 .search-box {
     display: flex;
@@ -364,14 +374,17 @@ nav ul li a {
 
 .message-error, .message-success {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 500px;
     min-height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    border-radius: 5px;
+    font-size: 28px;
 }
 
 .message-error {

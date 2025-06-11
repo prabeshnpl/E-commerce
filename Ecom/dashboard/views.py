@@ -48,20 +48,21 @@ def Login(request):
                 else:
                     messages.error(request,str(e))
 
-    return render(request,'login.html')
+    return render(request,'login.html',{'page':'login'})
 
 def Logout(request):
     logout(request)
     return redirect('home')
 
 def home(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'dashboard.html',{'page':'home'})
+
 
 def products(request,pk):
     product = Product.objects.get(id=pk)  
     images = product.secondary_images.all()
     
-    return render(request,'product.html',{'product':product,'images':images})
+    return render(request,'product.html',{'product':product,'images':images,'products':'login'})
 
 
 @login_required(redirect_field_name='login')
@@ -85,8 +86,7 @@ def registerseller(request):
     else:
         form = RegisterSellerForm()
             
-    return render(request,'registerseller.html',{'form' : form ,'filled':filled})
-
+    return render(request,'registerseller.html',{'form' : form ,'filled':filled,'page':'registerseller'})
 
 
 @login_required(redirect_field_name='login')
@@ -96,10 +96,9 @@ def cart(request):
         products = cart_obj.products.all()
        
     except Exception as e:
-        # messages.error(request,"User's cart not found !!")
         messages.error(request,str(e))
         
-    return render(request, 'cart.html',{'products':products})
+    return render(request, 'cart.html',{'products':products,'page':'cart'})
 
 @login_required(redirect_field_name='login')
 def sellerdashboard(request):
@@ -107,7 +106,7 @@ def sellerdashboard(request):
         return redirect('cart')
     products = Product.objects.filter(seller=request.user)
     count = products.count()
-    return render(request,'seller_dashboard.html',{'products':products,'count':count})
+    return render(request,'seller_dashboard.html',{'products':products,'count':count,'page':'sellerdashboard'})
 
 @login_required(redirect_field_name='login')
 def add_products(request):
@@ -128,9 +127,6 @@ def add_products(request):
     return render(request,'add_products.html',{'form':form})
 
 
-
-
-
 def load_products(request):
     page_no = request.GET.get('page',1) #if no pageno, default=1
     paginator = Paginator(Product.objects.all(),20)
@@ -138,9 +134,6 @@ def load_products(request):
 
     products = list(page.object_list.values('id','name','main_image','price','stock','brand'))
     return JsonResponse({'products':products,'has_next':page.has_next()})
-
-
-
 
 
 @login_required(redirect_field_name='login')
