@@ -35,8 +35,7 @@ def Login(request):
                 messages.error(request,'Password didn\'t matched ! ')
                 return render(request,'login.html')
             try:
-
-                user = CustomUser.objects.create(first_name=full_name, email=email, phone=phone)
+                user = CustomUser.objects.create(first_name=full_name, email=email, phone_no=phone)
                 user.set_password(password)
                 user.save()
                 if user:
@@ -57,13 +56,14 @@ def Logout(request):
 def home(request):
     return render(request, 'dashboard.html',{'page':'home'})
 
-
 def products(request,pk):
     product = Product.objects.get(id=pk)  
     images = product.secondary_images.all()
     
     return render(request,'product.html',{'product':product,'images':images,'products':'login'})
 
+def contact(request):
+    return render(request,'contact.html',{'page':'contact'})#page for active class in navbar
 
 @login_required(redirect_field_name='login')
 def registerseller(request):
@@ -81,7 +81,7 @@ def registerseller(request):
         else:
             messages.error(request,'Form already filled. Please wait a while. ')
 
-        return redirect('seller')
+        return redirect('sellerdashboard')
     
     else:
         form = RegisterSellerForm()

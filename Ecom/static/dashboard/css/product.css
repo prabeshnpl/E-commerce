@@ -199,11 +199,15 @@
     color: white;
   }
   
-  .delivery-section, .return-section {
+  .delivery-section, .return-section ,.seller-info {
     margin-bottom: 20px;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 5px;
+  }
+  .return-section, .seller-info{
+    width: 50%;
+    margin: 2px;
   }
   
   .section-title {

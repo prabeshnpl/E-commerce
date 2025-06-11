@@ -35,10 +35,9 @@
                 {% if request.user.is_seller %}
                     <li><a href="{% url 'sellerdashboard' %}" class="nav-link my-cart-btn {% if page == 'sellerdashboard' %}active{% endif %}" data-page="shop">My Products</a></li>
                 {% endif %}
-                <li><a href="#" class="nav-link {% if page == 'about' %}active{% endif %}" data-page="about">About</a></li>
-                <li><a href="#" class="nav-link {% if page == 'contact' %}active{% endif %}" data-page="contact">Contact</a></li>
+                <li><a href="{% url 'contact' %}" class="nav-link {% if page == 'contact' %}active{% endif %}" data-page="contact">Contact us</a></li>
                 {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li><a href="{% url 'logout' %}" class="nav-link">Logout</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}" class="nav-link {% if page == 'login' %}active{% endif %}">Login</a></li>
                 {% endif %}

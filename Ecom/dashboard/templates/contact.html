@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{%block css%}
+<link rel="stylesheet" href="{% static 'dashboard/css/contact.css' %}">
+{% endblock%}
+
+{% block title %}
+{%endblock%}
+{% block maincontent %}
+  <div class="container">
+    <h2>Contact Us</h2>
+    <form>
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" placeholder="Your name" required>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Your email" required>
+
+      <label for="subject">Subject</label>
+      <input type="text" id="subject" name="subject" placeholder="Subject" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+{%endblock%}

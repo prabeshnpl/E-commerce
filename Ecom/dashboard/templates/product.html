@@ -68,7 +68,7 @@
         <span class="delivery-icon">🚚</span>
         <div>
           <div>Standard Delivery</div>
-          <div style="color: #666; font-size: 12px;">Guaranteed by 14-16 Apr</div>
+          <div style="color: #666; font-size: 12px;">Guaranteed within a week</div>
         </div>
         <div style="margin-left: auto;">
           <div>Rs. 135</div>
@@ -80,24 +80,40 @@
         <div>Cash on Delivery Available</div>
       </div>
     </div>
-    
-    <div class="return-section">
-      <div class="section-title">
-        <span>Return & Warranty</span>
-        <span class="info-icon">ⓘ</span>
+    <div style="display: flex;">
+      <div class="return-section">
+        <div class="section-title">
+          <span>Return & Warranty</span>
+          <span class="info-icon">ⓘ</span>
+        </div>
+        
+        <div class="return-info">
+          <span class="return-icon">🔄</span>
+          <div>14 Days Free Returns</div>
+        </div>
+        
+        <div class="return-info">
+          <span class="return-icon">⚠️</span>
+          <div>Warranty not available</div>
+        </div>
       </div>
-      
-      <div class="return-info">
-        <span class="return-icon">🔄</span>
-        <div>14 Days Free Returns</div>
-      </div>
-      
-      <div class="return-info">
-        <span class="return-icon">⚠️</span>
-        <div>Warranty not available</div>
+      <div class="seller-info">
+  <div class="section-title">
+    <span>Seller Information</span>
+    <span class="info-icon">ⓘ</span>
+  </div>
+  <div class="seller-details">
+      <div><strong>Name:</strong> {{ product.seller.first_name }}</div>
+      <div><strong>Email:</strong> {{ product.seller.email }}</div>
+      <div><strong>Phone:</strong> {{ product.seller.phone_no }}</div>
+      <div>
+        <a href="">
+          View all products from this seller
+        </a>
       </div>
     </div>
-    
+  </div>
+    </div>
   </div>
 </div>
 <div class="product-description">
