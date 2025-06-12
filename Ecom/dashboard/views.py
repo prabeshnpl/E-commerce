@@ -89,7 +89,8 @@ def products(request,pk):
                 order=order,
                 quantity=quantity,
                 price=total_price / int(quantity),
-                seller=product.seller
+                seller=product.seller,
+                tracking_number=tracking_number
             )
             messages.success(request, f'Order placed successfully! Tracking Number: {tracking_number}')
             return redirect('cart')
@@ -99,7 +100,7 @@ def products(request,pk):
       
     images = product.secondary_images.all()
     
-    return render(request,'product.html',{'product':product,'images':images,'products':'home'})
+    return render(request,'product.html',{'product':product,'images':images,'page':'home'})
 
 def contact(request):
     if request.method == 'POST':
