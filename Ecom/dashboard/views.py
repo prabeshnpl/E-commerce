@@ -63,6 +63,15 @@ def products(request,pk):
     return render(request,'product.html',{'product':product,'images':images,'products':'login'})
 
 def contact(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        if not name or not email or not message:
+            messages.error(request,'All fields are required ! ')
+        else:
+            messages.success(request,'Message sent successfully ! ')
+            
     return render(request,'contact.html',{'page':'contact'})#page for active class in navbar
 
 @login_required(redirect_field_name='login')

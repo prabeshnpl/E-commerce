@@ -51,6 +51,14 @@
     </header>
     {% block maincontent %}
     {% endblock %}
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            document.querySelectorAll('[class^="message-"]').forEach(function(msg) {
+                msg.style.display = 'none';
+            });
+        }, 2000); 
+    });
+</script>
 </body>
 </html>
