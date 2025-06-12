@@ -1,9 +1,8 @@
-
-
-document.querySelectorAll('.remove-cart').forEach(button => {
-    button.addEventListener('click',function(){
+document.body.addEventListener('click', (event) => {
+    const productCard = event.target.closest('.cart-item');
+    if (event.target.classList.contains('bi-trash')) {
         if (window.confirm("Are you sure you want to remove this item from the cart?")) {
-            const id = parseInt(this.getAttribute('data-id'));
+            const id = parseInt(productCard.getAttribute('data-id'));
 
             fetch(`${window.location.origin}/remove_cart/`, {
                 method: 'POST',
@@ -36,10 +35,14 @@ document.querySelectorAll('.remove-cart').forEach(button => {
             });
 
             updateSubtotal();
+        }
+    }
 
-            
-        } })
-})
+    else if (productCard) {
+        const id = parseInt(productCard.getAttribute('data-id'));
+        window.location.href = `${window.location.origin}/products/${id}`;
+    }
+});
 
 function getCSRFToken() {
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
@@ -95,5 +98,11 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('close-btn').addEventListener('click',()=>{
         document.getElementById('overlay-payment').style.display = 'none';
+    });
+    
+    document.body.addEventListener('click', (event) => {
+        if (event.target.classList.contains('cart-item')) {
+            document.getElementById('overlay-payment').style.display = 'none';
+        }
     });
 });
