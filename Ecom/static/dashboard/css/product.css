@@ -259,10 +259,12 @@
 .overlay-content {
   background-color: white;
   width: 600px;
-  margin: 10% auto;
   padding: 20px;
   border-radius: 8px;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .overlay-content h3 {

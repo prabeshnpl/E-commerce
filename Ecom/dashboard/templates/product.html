@@ -123,21 +123,28 @@
   <div class="overlay-content">
     <span class="close-btn" onclick="closeOverlay()">&times;</span>
     <h3>Order Product</h3>
+
     <form method="POST">
       {% csrf_token %}
       <div class="quantity-container">
         <label for="quantity" class="quantity-label">Quantity</label>
         <p class="quantity-btn" id="pdecrease" data-price="{{product.price}}">−</p>
-        <input type="text" class="quantity-input" value="1" id="pquantity" style="width: 30%;" readonly>
+        <input name="quantity" type="text" class="quantity-input" value="1" id="pquantity" style="width: 30%;" readonly>
         <p class="quantity-btn" id="pincrease" data-price="{{product.price}}">+</p>
       </div>
       
+      <label for="province">Shipping Province:</label>
+      <input type="text" name="province" id="province" placeholder="Enter your address" required>
+
+      <label for="city">Shipping City:</label>
+      <input type="text" name="city" id="city" placeholder="Enter your address" required>
 
       <label for="address">Shipping Address:</label>
-      <input type="text" id="address" placeholder="Enter your address" required>
+      <input type="text" name="address" id="address" placeholder="Enter your address" required>
+
 
       <label for="payment">Payment Method:</label>
-      <select id="payment">
+      <select id="payment" name="payment_method">
         <option value="cod">Cash on Delivery</option>
         <option value="card">Credit/Debit Card</option>
         <option value="wallet">Digital Wallet</option>
@@ -178,9 +185,9 @@
       let productCount = document.getElementById(`pquantity`);
       productCount.value = parseInt(productCount.value) + 1;
 
-      let totalProductPrice = document.getElementById(`price`);
-      totalProductPrice.innerHTML = `${(price * parseFloat(productCount.value)).toFixed(2)}`;
-      productCount.value = parseInt(productCount.value);
+      let totalProductPrice = (price * parseFloat(productCount.value)).toFixed(2);
+      document.getElementById(`price`).innerHTML = `${totalProductPrice}`;
+      document.getElementById('totalAmount').innerHTML = (parseInt(totalProductPrice) + 135).toFixed(2);
   });
 
   document.getElementById('pdecrease').addEventListener('click', function() {
@@ -192,8 +199,9 @@
         productCount.value = 1;
     }
 
-    let totalProductPrice = document.getElementById(`price`);
-    totalProductPrice.innerHTML = `${(price * parseFloat(productCount.value)).toFixed(2)}`;
+    let totalProductPrice = (price * parseFloat(productCount.value)).toFixed(2);
+    document.getElementById(`price`).innerHTML = `${totalProductPrice}`;
+    document.getElementById('totalAmount').innerHTML = (parseInt(totalProductPrice) + 135).toFixed(2);
 });
 
   document.getElementById('totalAmount').innerHTML = (parseFloat(document.getElementById('price').innerHTML) + 135).toFixed(2);

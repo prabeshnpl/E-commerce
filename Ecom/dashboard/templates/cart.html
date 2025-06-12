@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
  <style>
     .cart-item:hover{
@@ -76,6 +76,35 @@
             <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
         </div>
     </div>
+<hr><hr>
+    <!-- My Purchase Products -->
+    <div class="my-purchase">
+        <h1>My Purchases</h1>
+        <div class="purchase-container">
+            {% if orders %}
+                {% for order in orders %}
+                    <div class="purchase-item">
+                        <div class="purchase-details">
+                            <h3>Order : {{ order.tracking_number }}</h3>
+                            <p>Order Date: {{ order.order_date }}</p>
+                            <p>Total Price: Rs.{{ order.total }}</p>
+                        </div>
+                        <div class="purchase-products">
+                            {% for product in order.products.all %}
+                                <div class="purchase-product">
+                                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}">
+                                    <p>{{ product.name }}</p>
+                                    <p>Price: ${{ product.price }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No purchases found.</p>
+            {% endif %}
+        </div>
+    </div>
 </main>
 
 <section id="overlay-payment" class="overlay-payment flex-col" >
@@ -89,11 +118,5 @@
 </section>
  
 <script src="{% static 'dashboard/js/cart.js' %}"></script>
-<!-- <script>
-    document.querySelectorAll('.message-error').forEach((message)=>{
-        setTimeout(()=>{
-            message.style.display = 'none';
-        },2000)
-    })
-</script> -->
+
 {% endblock %}

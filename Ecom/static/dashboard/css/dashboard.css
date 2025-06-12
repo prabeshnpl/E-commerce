@@ -240,7 +240,7 @@ nav ul li a {
 }
 
 /* Cart Page Styles */
-.cart-page {
+.cart-page ,.my-purchase{
     display: block;
     padding: 20px;
 }
@@ -249,7 +249,7 @@ nav ul li a {
     display: block;
 }
 
-.cart-page h1 {
+.cart-page h1 , .my-purchase h1 {
     font-size: 28px;
     color: #0a2540;
     margin-bottom: 20px;

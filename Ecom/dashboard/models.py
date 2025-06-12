@@ -116,11 +116,20 @@ class RegisterSeller(models.Model):
     def __str__(self):
         return self.store_name
 
+class MiniOrder(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='mini_orders')
+    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='mini_orders')
+    quantity = models.IntegerField(default=1)
+    price = models.FloatField()
+    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='seller_orders')
+
+    def __str__(self):
+        return f"{self.product.name} in Order {self.order.id}"
+
 class Order(models.Model):
     buyer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders')
-    products = models.ManyToManyField(Product, related_name='orders')
+    products = models.ManyToManyField(Product, through=MiniOrder, related_name='orders')
     total_amount = models.FloatField()
-    # seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='seller_orders')
     order_date = models.DateTimeField(auto_now_add=True)
     delivery_status = models.CharField(max_length=64, default='Pending')
     shipping_address = models.CharField(max_length=256)
@@ -132,4 +141,5 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=64, default='Cash on Delivery')
 
     def __str__(self):
-        return f"Order {self.id} by {self.buyer.email} - {self.status}"
+        return f"Order {self.id} by {self.buyer.email} - {self.delivery_status}"
+

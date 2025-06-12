@@ -1,12 +1,14 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.core.paginator import Paginator
-from .models import CustomUser, Cart, Product,RegisterSeller, ProductImages
+from .models import CustomUser, Cart, Product,RegisterSeller, Order, MiniOrder
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
 import json
 from .forms import RegisterSellerForm, AddProductForm
+import uuid
+from datetime import datetime, timedelta
 # Create your views here.
 
 def Login(request):
@@ -57,15 +59,44 @@ def home(request):
     return render(request, 'dashboard.html',{'page':'home'})
 
 def products(request,pk):
-    if not pk:
+    try:
+        product = get_object_or_404(Product,id=pk)
+        if not pk:
+            return redirect('home')
+        if request.method == 'POST':
+            data = request.POST
+            quantity = data['quantity']
+            total_price = product.price * int(quantity)
+            shipping_address = data['address']
+            shipping_city = data['city']
+            shipping_province = data['province']
+            payment_method = data['payment_method']
+            tracking_number = str(uuid.uuid4()).replace('-', '').upper()[:12]
+            delivery_date = datetime.now() + timedelta(weeks=1)
+            order = Order.objects.create(
+                buyer=request.user,
+                total_amount=total_price + int(135),
+                shipping_address=shipping_address,
+                shipping_city=shipping_city,
+                shipping_province=shipping_province,
+                payment_method=payment_method,
+                tracking_number=tracking_number,
+                delivery_date=delivery_date
+            )
+            
+            MiniOrder.objects.create(
+                product=product,
+                order=order,
+                quantity=quantity,
+                price=total_price / int(quantity),
+                seller=product.seller
+            )
+            messages.success(request, f'Order placed successfully! Tracking Number: {tracking_number}')
+            return redirect('cart')
+    except Exception as e:
+        messages.error(request,str(e))
         return redirect('home')
-    if not Product.objects.filter(id=pk).exists():
-        messages.error(request,'Product not found ! ')
-        return redirect('home')
-    if request.method == 'POST':
-        data = request.POST
-        
-    product = Product.objects.get(id=pk)  
+      
     images = product.secondary_images.all()
     
     return render(request,'product.html',{'product':product,'images':images,'products':'home'})
@@ -105,7 +136,6 @@ def registerseller(request):
             
     return render(request,'registerseller.html',{'form' : form ,'filled':filled,'page':'registerseller'})
 
-
 @login_required(redirect_field_name='login')
 def cart(request):
     try:
@@ -115,7 +145,7 @@ def cart(request):
     except Exception as e:
         messages.error(request,str(e))
         
-    return render(request, 'cart.html',{'products':products,'page':'cart'})
+    return render(request, 'cart.html',{'products':products,'page':'cart','orders':Order.objects.filter(buyer=request.user).order_by('-order_date')})
 
 @login_required(redirect_field_name='login')
 def sellerdashboard(request):
@@ -143,7 +173,6 @@ def add_products(request):
         form = AddProductForm()
     return render(request,'add_products.html',{'form':form})
 
-
 def load_products(request):
     page_no = request.GET.get('page',1) #if no pageno, default=1
     paginator = Paginator(Product.objects.all(),20)
@@ -151,7 +180,6 @@ def load_products(request):
 
     products = list(page.object_list.values('id','name','main_image','price','stock','brand'))
     return JsonResponse({'products':products,'has_next':page.has_next()})
-
 
 @login_required(redirect_field_name='login')
 def add_to_cart(request):
