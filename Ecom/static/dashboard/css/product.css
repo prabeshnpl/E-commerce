@@ -171,6 +171,7 @@
     border: none;
     text-align: center;
     font-size: 14px;
+    border: none;
   }
   
   .action-buttons {
@@ -242,3 +243,59 @@
     color: #666;
   }
   
+
+/* Overlay for purchase */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 1000;
+}
+
+.overlay-content {
+  background-color: white;
+  width: 600px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.overlay-content h3 {
+  margin-top: 0;
+}
+
+.overlay-content input, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 20px;
+  color: red;
+}
+.total-amount,.delivery-fee{
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  text-align: center;
+  margin: 10px;
+}
+.price{
+  padding: 5px;
+  width: 30%;
+  background-color: #ffc107;
+  border-radius: 10px;
+}

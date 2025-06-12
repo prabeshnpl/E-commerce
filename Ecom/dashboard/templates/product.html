@@ -103,7 +103,6 @@
     <span class="info-icon">ⓘ</span>
   </div>
   <div class="seller-details">
-      <div><strong>Name:</strong> {{ product.seller.first_name }}</div>
       <div><strong>Email:</strong> {{ product.seller.email }}</div>
       <div><strong>Phone:</strong> {{ product.seller.phone_no }}</div>
       <div>
@@ -120,49 +119,119 @@
   {{ product.description }}
 </div>
 
+<div class="overlay" id="purchaseOverlay">
+  <div class="overlay-content">
+    <span class="close-btn" onclick="closeOverlay()">&times;</span>
+    <h3>Order Product</h3>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="quantity-container">
+        <label for="quantity" class="quantity-label">Quantity</label>
+        <p class="quantity-btn" id="pdecrease" data-price="{{product.price}}">−</p>
+        <input type="text" class="quantity-input" value="1" id="pquantity" style="width: 30%;" readonly>
+        <p class="quantity-btn" id="pincrease" data-price="{{product.price}}">+</p>
+      </div>
+      
+
+      <label for="address">Shipping Address:</label>
+      <input type="text" id="address" placeholder="Enter your address" required>
+
+      <label for="payment">Payment Method:</label>
+      <select id="payment">
+        <option value="cod">Cash on Delivery</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="wallet">Digital Wallet</option>
+      </select>
+
+      <div>
+        <div class="total-amount">
+          <p style="padding: 5px;"><strong>Total Price: </strong></p>
+          <p class="price">Rs.<span id="price">{{ product.price }}</span></p>
+        </div>
+        <div class="delivery-fee">
+          <p style="padding: 5px;"><strong>Delivery Fee: </strong></p>
+          <p class="price">Rs. 135</p>
+        </div>
+        <hr style="width:100%; border: none; border-top: 1px solid #eee; margin: 10px 0;">
+        <div class="total-amount">
+          <p style="padding: 5px;"><strong>Total Amount: </strong></p>
+          <p class="price">Rs.<span id="totalAmount"></span></p>
+        </div>
+      </div>
+      <button type="submit" class="btn">Confirm Order</button>
+    </form>
+  </div>
+</div>
 
 <script>
-  document.getElementById('addToCart').addEventListener('click',()=>{
-    fetch(`${window.location.origin}/add_to_cart/`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRFToken':getCSRFToken()
-              },
-              body: JSON.stringify({
-                  id: event.target.dataset.id,
-                  name: event.target.dataset.name,
-                  price: event.target.dataset.price,
-                  image: event.target.dataset.image
-              })
-          })
-          .then(response => response.json())
-          .then(data => {
-              console.log('Item added to cart:', data);
-              const successMessageContainer = document.createElement('div');
-              const successMessage = document.createElement('div');
-              successMessage.textContent = 'Item added to cart successfully!';
-              successMessage.className = 'message-success';
-              successMessageContainer.className = 'message-container';
-              successMessageContainer.prepend(successMessage);
-              document.body.prepend(successMessageContainer);
-
-              setTimeout(() => {
-                  successMessage.remove();
-              }, 1500);
-          })
-          .catch(error => {
-              console.error('Error adding item to cart:', error);
-          });
-  });
+  function closeOverlay() {
+      document.getElementById('purchaseOverlay').style.display = 'none';
+  }
 
   function getCSRFToken() {
       const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
       return csrfToken ? csrfToken.value : '';
   };
-</script>
+  
+  document.getElementById('pincrease').addEventListener('click', function() {
+      const price = parseFloat(this.getAttribute('data-price'));
+      let productCount = document.getElementById(`pquantity`);
+      productCount.value = parseInt(productCount.value) + 1;
 
-<script>
+      let totalProductPrice = document.getElementById(`price`);
+      totalProductPrice.innerHTML = `${(price * parseFloat(productCount.value)).toFixed(2)}`;
+      productCount.value = parseInt(productCount.value);
+  });
+
+  document.getElementById('pdecrease').addEventListener('click', function() {
+    const price = parseFloat(this.getAttribute('data-price'));
+    let productCount = document.getElementById(`pquantity`);
+    productCount.value = parseInt(productCount.value) - 1;
+
+    if (productCount.value <= 0) {
+        productCount.value = 1;
+    }
+
+    let totalProductPrice = document.getElementById(`price`);
+    totalProductPrice.innerHTML = `${(price * parseFloat(productCount.value)).toFixed(2)}`;
+});
+
+  document.getElementById('totalAmount').innerHTML = (parseFloat(document.getElementById('price').innerHTML) + 135).toFixed(2);
+
+  document.getElementById('addToCart').addEventListener('click',()=>{
+      fetch(`${window.location.origin}/add_to_cart/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken':getCSRFToken()
+                },
+                body: JSON.stringify({
+                    id: event.target.dataset.id,
+                    name: event.target.dataset.name,
+                    price: event.target.dataset.price,
+                    image: event.target.dataset.image
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Item added to cart:', data);
+                const successMessageContainer = document.createElement('div');
+                const successMessage = document.createElement('div');
+                successMessage.textContent = 'Item added to cart successfully!';
+                successMessage.className = 'message-success';
+                successMessageContainer.className = 'message-container';
+                successMessageContainer.prepend(successMessage);
+                document.body.prepend(successMessageContainer);
+
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 1500);
+            })
+            .catch(error => {
+                console.error('Error adding item to cart:', error);
+            });
+    });
+
   // Handle quantity buttons
   document.getElementById('decrease').addEventListener('click', function() {
     const input = document.getElementById('quantity');
@@ -178,25 +247,9 @@
     input.value = value + 1;
   });
   
-  // Handle thumbnail clicks
-  const thumbnails = document.querySelectorAll('.thumbnail');
-  thumbnails.forEach(thumb => {
-    thumb.addEventListener('click', function() {
-      // Remove active class from all thumbnails
-      thumbnails.forEach(t => t.classList.remove('active'));
-      
-      // Add active class to clicked thumbnail
-      this.classList.add('active');
-      
-      // In a real implementation, this would change the main image
-      // For this demonstration, we'll just log it
-      console.log('Thumbnail clicked');
-    });
-  });
-  
   // Simulate Buy Now functionality for now
   document.querySelector('.btn-buy').addEventListener('click', function() {
-    alert('Proceeding to checkout!');
+    document.getElementById('purchaseOverlay').style.display = 'block';
   });
 </script>
 {% endblock %}

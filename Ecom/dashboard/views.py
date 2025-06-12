@@ -57,10 +57,18 @@ def home(request):
     return render(request, 'dashboard.html',{'page':'home'})
 
 def products(request,pk):
+    if not pk:
+        return redirect('home')
+    if not Product.objects.filter(id=pk).exists():
+        messages.error(request,'Product not found ! ')
+        return redirect('home')
+    if request.method == 'POST':
+        data = request.POST
+        
     product = Product.objects.get(id=pk)  
     images = product.secondary_images.all()
     
-    return render(request,'product.html',{'product':product,'images':images,'products':'login'})
+    return render(request,'product.html',{'product':product,'images':images,'products':'home'})
 
 def contact(request):
     if request.method == 'POST':

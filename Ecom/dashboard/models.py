@@ -70,7 +70,6 @@ class ProductImages(models.Model):
     def __str__(self):
         return f'{self.product.name}'
 
-
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='user_cart')
     products = models.ManyToManyField(Product,related_name='in_carts',blank=True)
@@ -117,3 +116,20 @@ class RegisterSeller(models.Model):
     def __str__(self):
         return self.store_name
 
+class Order(models.Model):
+    buyer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders')
+    products = models.ManyToManyField(Product, related_name='orders')
+    total_amount = models.FloatField()
+    # seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='seller_orders')
+    order_date = models.DateTimeField(auto_now_add=True)
+    delivery_status = models.CharField(max_length=64, default='Pending')
+    shipping_address = models.CharField(max_length=256)
+    shipping_city = models.CharField(max_length=64)
+    shipping_province = models.CharField(max_length=64)
+    tracking_number = models.CharField(max_length=64, null=True, blank=True)
+    delivery_date = models.DateTimeField(null=True, blank=True)
+    payment_status = models.CharField(max_length=64, default='Pending')
+    payment_method = models.CharField(max_length=64, default='Cash on Delivery')
+
+    def __str__(self):
+        return f"Order {self.id} by {self.buyer.email} - {self.status}"

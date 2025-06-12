@@ -98,7 +98,7 @@ window.addEventListener('DOMContentLoaded', function() {
                         </div>
                         <div class="product-info">
                             <h3 class="product-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${product.name}</h3>
-                            <p class="product-price">Brand : ${product.brand}</p>
+                            <p class="product-price" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Brand : ${product.brand}</p>
                             <p class="product-price">$${product.price}</p>
                             <button class="add-to-cart-btn" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}" >Add to Cart</button>
                         </div>
