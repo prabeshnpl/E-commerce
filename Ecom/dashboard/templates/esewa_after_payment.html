@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block maincontent %}
+
+{% block css %}
+  <style>
+    .esewa-container {
+        width: 100%;
+        height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .esewa-container .success{
+        background-color: #d9fae2;
+        width: 40%;
+        height: 50vh;
+        border-radius: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 25px;
+    }
+    .esewa-container .failure{
+        background: #f8d7da;
+        width: 40%;
+        height: 50vh;
+        border-radius: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 25px;
+    }
+    .success h1 {
+      color: #155724;
+    }
+    .success p {
+      color: #155724;
+      font-size: 18px;
+    }
+    .success .btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .failure h1 {
+      color: #721c24;
+    }
+    .failure p {
+      color: #721c24;
+      font-size: 18px;
+    }
+    .failure .btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+  </style>
+{% endblock %}
+{% if success %}
+<div class="esewa-container">
+    <div class="success">
+        <h1>✅ Payment Successful</h1>
+        <p>Thank you! Your transaction has been completed.</p>
+        <a href="/" class="btn">Return to Dashboard</a>
+    </div>
+</div>
+{% elif failure %}
+<div class="esewa-container">
+    <div class="failure">
+        <h1>❌ Payment Failed</h1>
+        <p>Sorry, your transaction could not be completed.</p>
+        <a href="/" class="btn">Try Again</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

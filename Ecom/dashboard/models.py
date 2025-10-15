@@ -81,6 +81,7 @@ class RegisterSeller(models.Model):
     class PrimaryProductCategory(models.TextChoices):
         CLOTHING = 'clothing', 'Clothing'
         ELECTRONICS = 'electronics', 'Electronics'
+        FOOTWEAR = 'footwear', "Footwear"
         HOME_APPLIANCES = 'home_appliances', 'Home Appliances'
         BOOKS = 'books', 'Books'
         OTHER = 'other', 'Other'
@@ -117,6 +118,9 @@ class RegisterSeller(models.Model):
         return self.store_name
 
 class MiniOrder(models.Model):
+    '''
+    This is order for seller description
+    '''
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='mini_orders')
     order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='mini_orders')
     quantity = models.IntegerField(default=1)
@@ -128,19 +132,45 @@ class MiniOrder(models.Model):
         return f"{self.product.name} in Order {self.order.id}"
 
 class Order(models.Model):
+
+    DELIVERY_STATUS_CHOICES =  (
+        ('pending','PENDING'),
+        ('completed','COMPLETED'),
+    )
+
+    PAYMENT_STATUS_CHOICES =  (
+        ('pending','PENDING'),
+        ('completed','COMPLETED'),
+    )
+
+    PAYMENT_METHOD_CHOICES =  (
+        ('cod','CASH ON DELIVERY'),
+        ('card','CREDIT/DEBIT'),
+        ('esewa','ESEWA')
+    )
+    
     buyer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders')
     products = models.ManyToManyField(Product, through=MiniOrder, related_name='orders')
     total_amount = models.FloatField()
     order_date = models.DateTimeField(auto_now_add=True)
-    delivery_status = models.CharField(max_length=64, default='Pending')
+    delivery_status = models.CharField(max_length=64, choices=DELIVERY_STATUS_CHOICES, default='pending')
     shipping_address = models.CharField(max_length=256)
     shipping_city = models.CharField(max_length=64)
     shipping_province = models.CharField(max_length=64)
     tracking_number = models.CharField(max_length=64, null=True, blank=True)
     delivery_date = models.DateTimeField(null=True, blank=True)
-    payment_status = models.CharField(max_length=64, default='Pending')
-    payment_method = models.CharField(max_length=64, default='Cash on Delivery')
+    payment_status = models.CharField(max_length=64, choices=PAYMENT_STATUS_CHOICES, default='pending')
+    payment_method = models.CharField(max_length=64, choices=PAYMENT_METHOD_CHOICES, default='cod')
 
     def __str__(self):
         return f"Order {self.id} by {self.buyer.email} - {self.delivery_status}"
 
+class TransactionDetails(models.Model):
+    detail = models.JSONField(blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="transaction")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="transaction")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="transaction")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"user:{self.user.id} -> product:{self.product.id}"

@@ -5,11 +5,22 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
-import json
 from .forms import RegisterSellerForm, AddProductForm
-import uuid
 from datetime import datetime, timedelta
+import requests, uuid, hmac, hashlib, base64, json
+
 # Create your views here.
+
+def generate_esewa_signature(msg, secret_key):
+    try:
+        hmac_sha256 = hmac.new(secret_key.encode("utf-8"), msg.encode("utf-8"), hashlib.sha256)
+        digest = hmac_sha256.digest()
+        signature = base64.b64encode(digest).decode('utf-8') 
+        
+        return signature
+    except Exception as e:
+        print(repr(e))
+        raise ValueError(e)
 
 def Login(request):
     if request.user.is_authenticated:
@@ -66,13 +77,16 @@ def products(request,pk):
         if request.method == 'POST':
             data = request.POST
             quantity = data['quantity']
-            total_price = product.price * int(quantity)
+            amount = product.price * int(quantity)
+            tax_amount = amount * 0.13
+            total_price = amount +tax_amount
             shipping_address = data['address']
             shipping_city = data['city']
             shipping_province = data['province']
             payment_method = data['payment_method']
             tracking_number = str(uuid.uuid4()).replace('-', '').upper()[:12]
             delivery_date = datetime.now() + timedelta(weeks=1)
+
             order = Order.objects.create(
                 buyer=request.user,
                 total_amount=total_price + int(135),
@@ -81,9 +95,8 @@ def products(request,pk):
                 shipping_province=shipping_province,
                 payment_method=payment_method,
                 tracking_number=tracking_number,
-                delivery_date=delivery_date
+                delivery_date=delivery_date,
             )
-            
             MiniOrder.objects.create(
                 product=product,
                 order=order,
@@ -92,6 +105,21 @@ def products(request,pk):
                 seller=product.seller,
                 tracking_number=tracking_number
             )
+
+            if payment_method == "esewa" or payment_method == "card":
+                payload = esewa_payment(
+                    total_amount=total_price,
+                    amount=amount,
+                    tax_amount=tax_amount,
+                    product_code="EPAYTEST",
+                    product_delivery_charge=0,
+                    product_service_charge=0,
+                    transaction_uuid=tracking_number
+                )
+                return render(request, "esewa_payment.html", {
+                    "payload": payload
+                })
+            
             messages.success(request, f'Order placed successfully! Tracking Number: {tracking_number}')
             return redirect('cart')
     except Exception as e:
@@ -205,4 +233,66 @@ def remove_cart(request):
         cart.save()
         return JsonResponse({"Message":'Removed successfully'})
         
+def esewa_payment(total_amount, amount, tax_amount, product_code, product_service_charge, product_delivery_charge, transaction_uuid):
 
+    secret_key = "8gBm/:&EnhH.1/q"
+    signed_field_names = "amount,tax_amount,total_amount,transaction_uuid,product_code"
+    msg = f"amount={amount},tax_amount={tax_amount},total_amount={total_amount},transaction_uuid={transaction_uuid},product_code={product_code}"
+
+    signature = generate_esewa_signature(msg=msg, secret_key=secret_key)
+    
+    payload = {
+    "amount": amount,
+    "failure_url": "http://127.0.0.1:8000/esewa-failure/",
+    "product_delivery_charge": product_delivery_charge,
+    "product_service_charge": product_service_charge,
+    "product_code": product_code,
+    "signature": signature,
+    "signed_field_names": signed_field_names,
+    "success_url": "http://127.0.0.1:8000/esewa-success/",
+    "tax_amount": tax_amount,
+    "total_amount": total_amount,
+    "transaction_uuid": transaction_uuid
+    }
+    return payload
+
+# @csrf_exempt
+def esewa_success(request):
+    encoded_data = request.GET.get("data")
+
+    decoded_bytes = base64.b64decode(encoded_data)
+    decoded_str = decoded_bytes.decode("utf-8")
+
+    payload = json.loads(decoded_str)
+    print(payload)
+
+    status = payload.get("status")
+    tracking_number = payload.get("transaction_uuid")
+    order = Order.objects.get(tracking_number=tracking_number)
+
+    if status == "COMPLETE":        
+        order.payment_method = "completed"
+        order.save()
+        return render(request, "esewa_after_payment.html", {"success":True, "failure":False})
+
+    miniorder = MiniOrder.objects.get(order__id=order.id)
+    miniorder.delete()
+    order.delete()
+    return render("esewa_after_payment.html", {"success":False, "failure":True})
+    
+
+# @csrf_exempt
+def esewa_failure(request):
+    print("Failed")
+    return render(request, "esewa_after_payment.html", {"success":False, "failure":True})
+
+def verify_esewa_transaction(pid, amt, ref_id):
+    url = "https://uat.esewa.com.np/epay/transrec"
+    payload = {
+        'amt': amt,
+        'scd': 'EPAYTEST',  # Replace with your merchant code
+        'pid': pid,
+        'rid': ref_id
+    }
+    response = requests.post(url, data=payload)
+    return "Success" in response.text

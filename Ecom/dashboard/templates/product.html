@@ -7,6 +7,7 @@
 
 {% block maincontent %}
 <div class="product-container">
+
   <div class="product-gallery">
     <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="main-image">
     
@@ -114,6 +115,7 @@
   </div>
     </div>
   </div>
+  
 </div>
 <div class="product-description">
   {{ product.description|format_description }}
@@ -145,9 +147,9 @@
 
       <label for="payment">Payment Method:</label>
       <select id="payment" name="payment_method">
-        <option value="Cash On Delivery">Cash on Delivery</option>
-        <option value="Credit/Debit Card">Credit/Debit Card</option>
-        <option value="E-Wallet">Digital Wallet</option>
+        <option value="cod">Cash on Delivery</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="esewa">E-Sewa</option>
       </select>
 
       <div>
@@ -164,8 +166,8 @@
           <p style="padding: 5px;"><strong>Total Amount: </strong></p>
           <p class="price">Rs.<span id="totalAmount"></span></p>
         </div>
-      </div>
-      <button type="submit" class="btn">Confirm Order</button>
+      </div>       
+        <button type="submit" class="btn">Confirm Order</button>
     </form>
   </div>
 </div>

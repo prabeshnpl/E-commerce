@@ -19,4 +19,7 @@ urlpatterns = [
 
     path('add_to_cart/',views.add_to_cart,name='add_to_cart'),
     path('remove_cart/',views.remove_cart,name='remove_cart'),
+
+    path("esewa-success/", views.esewa_success, name="esewa-success"),
+    path("esewa-failure/", views.esewa_failure, name="esewa-failure"),
 ]

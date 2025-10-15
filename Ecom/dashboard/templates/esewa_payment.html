@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Container styling */
+        form {
+        max-width: 400px;
+        margin: 40px auto;
+        padding: 24px;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Input fields */
+        input[type="text"] {
+        width: 100%;
+        padding: 10px 14px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+        border-color: #2d9cdb;
+        outline: none;
+        }
+
+        /* Submit button */
+        input[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        background-color: #2d9cdb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+        background-color: #238ac9;
+        }
+    </style>
+</head>
+<body>
+ 
+
+<form id="esewaForm" action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
+  {% for key, value in payload.items %}
+    <input type="hidden" name="{{ key }}" value="{{ value }}">
+  {% endfor %}
+  <input type="hidden" name="scd" value="EPAYTEST">
+  <input type="submit" value="Submit">
+</form>
+<script>document.getElementById('esewaForm').submit();</script>
+    
+
+<!-- 🔍 DEBUG OUTPUT
+<div style="background:#eee;padding:10px;margin-bottom:20px;">
+  <strong>Debug Info:</strong><br>
+    {% for key, value in payload.items %}
+        <div>{{key}}:{{ value }}</div><br>
+    {% endfor %}
+</div> -->
+</body>
+</html>
