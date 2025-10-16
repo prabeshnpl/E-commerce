@@ -1,13 +1,17 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-commerce Store</title>
-    {% load static %}
+    <link rel="icon" href="{% static 'img/e-com-logo.png' %}" type="image/png">
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+
     {% block css %}
     {% endblock %}
+    
 </head>
 
 <body>
@@ -21,7 +25,9 @@
         {% endfor %}
     {% endif %}
     <header>
-        <div class="logo">LOGO</div>
+        <div class="logo">
+            <img src="{% static 'img/e-com-logo.png' %}" alt="e-com-logo">
+        </div>
         <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
         <div class="search-box">
             <input type="text" placeholder="Search...">

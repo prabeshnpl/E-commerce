@@ -11,12 +11,11 @@ body {
 
 /* Header styles */
 header {
-    background-color: white;
+    background-color: rgb(241, 241, 241);
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     flex-wrap: wrap;
 }
 
@@ -45,7 +44,11 @@ img {
     color: #0a2540;
     margin-right: 20px;
 }
-
+.logo img{
+    height: auto;
+    width: 80px;
+    border-radius: 50%;
+}
 nav {
     flex: 1;
 }
