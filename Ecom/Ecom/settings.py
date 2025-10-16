@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://e-commerce-vw9y.onrender.com",
+    "https://kinmel-7777.onrender.com",
 ]
 
 AUTH_USER_MODEL = 'dashboard.CustomUser'
