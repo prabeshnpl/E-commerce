@@ -75,11 +75,13 @@ def products(request,pk):
         if not pk:
             return redirect('home')
         if request.method == 'POST':
+            if not request.user.is_authenticated:
+                return redirect('home')
             data = request.POST
             quantity = data['quantity']
             amount = product.price * int(quantity)
             tax_amount = amount * 0.13
-            total_price = amount +tax_amount
+            total_price = amount + tax_amount
             shipping_address = data['address']
             shipping_city = data['city']
             shipping_province = data['province']
@@ -271,7 +273,8 @@ def esewa_success(request):
     order = Order.objects.get(tracking_number=tracking_number)
 
     if status == "COMPLETE":        
-        order.payment_method = "completed"
+        order.payment_method = "esewa"
+        order.payment_status = "completed"
         order.save()
         return render(request, "esewa_after_payment.html", {"success":True, "failure":False})
 
