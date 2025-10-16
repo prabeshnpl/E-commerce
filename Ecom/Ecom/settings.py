@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://e-commerce-vw9y.onrender.com",
+]
+
 AUTH_USER_MODEL = 'dashboard.CustomUser'
 
 # Application definition
